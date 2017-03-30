@@ -1,0 +1,22 @@
+{
+  "name": "svgboard",
+  "version": "1.0.0",
+  "description": "SVG Drawing Board library",
+  "main": "lib/index.js",
+  "author": "GuskiS",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -w -p src/"
+  },
+  "dependencies": {
+    "svg.draggable.js": "2.2.1",
+    "svg.draw.js": "2.0.1",
+    "svg.js": "2.5.1",
+    "svg.resize.js": "1.4.0",
+    "svg.select.js": "2.1.1"
+  },
+  "devDependencies": {
+    "tslint": "4.5.1",
+    "typescript": "2.2.2"
+  }
+}

@@ -1,2 +1,2 @@
 # svg.board.js
-SVG Drwawing Board library
+SVG Drawing Board library

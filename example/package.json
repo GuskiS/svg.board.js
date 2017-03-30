@@ -1,0 +1,14 @@
+{
+  "name": "svgboard-example",
+  "version": "1.0.0",
+  "description": "Example of SVG Drawing Board",
+  "author": "GuskiS",
+  "license": "MIT",
+  "scripts": {
+    "bundle": "watchify index.js -o bundle.js"
+  },
+  "dependencies": {
+    "browserify": "14.1.0",
+    "watchify": "3.9.0"
+  }
+}

@@ -1,7 +1,8 @@
 import * as deepmerge from 'deepmerge';
 
 import {
-  Options, BoardOptionsInterface, BoardOptionsCurrent, BoardOptionsCategory, BoardOptionsMinMax, ShapeObjectInterface
+  Options, BoardOptionsInterface, BoardOptionsCurrent,
+  BoardOptionsCategory, BoardOptionsMinMax, ShapeObjectInterface
 } from './../../types';
 
 export class BoardOptions implements BoardOptionsInterface {

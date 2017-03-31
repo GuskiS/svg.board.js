@@ -1,10 +1,10 @@
-import { ShapeSvgInterface, BoardInterface } from './';
+import { ShapeSvgInterface, BoardMainInterface } from './';
 
 export interface ElementInterface {
-  board: BoardInterface;
+  board: BoardMainInterface;
   event: Event;
   nested: ShapeSvgInterface;
-  attrs: any;
+  attrs: ElementAttributes;
   build: () => ShapeSvgInterface|void;
 }
 

@@ -1,19 +1,19 @@
 import { ShapeObject } from './';
 
 import {
-  ShapeSvgInterface, BoardInterface, ShapeObjectInterface,
-  ShapeEventsInterface, HistoryInterface,
-  BoardOptionsInterface
+  BoardMainInterface, BoardOptionsInterface,
+  ShapeSvgInterface, ShapeObjectInterface,
+  ShapeEventsInterface, ShapeHistoryInterface,
 } from './../../types';
 
 export class ShapeEvents implements ShapeEventsInterface {
-  board: BoardInterface;
+  board: BoardMainInterface;
 
-  constructor(board: BoardInterface) {
+  constructor(board: BoardMainInterface) {
     this.board = board;
   }
 
-  get history(): HistoryInterface {
+  get history(): ShapeHistoryInterface {
     return this.board.deps.history;
   }
 
@@ -21,13 +21,9 @@ export class ShapeEvents implements ShapeEventsInterface {
     return this.board.deps.options;
   }
 
-  createPre(e: Event): void {
-    this.options.createPre(e);
-
-    if (!e.defaultPrevented) {
-      const shape = this.shape(e);
-      this.history.add([shape], 'draw');
-    }
+  create(e: Event): void {
+    const shape = this.shape(e);
+    this.history.add([shape], 'draw');
   }
 
   updatePre(e: Event): void {

@@ -1,19 +1,19 @@
 import { ShapeObject, ShapeEvents } from './';
 import * as ShapeElements from './../elements';
 import {
+  BoardMainInterface, ElementAttributes, ShapeContainerInterface,
   ShapeObjectContainer, ShapeObjectInterface, ShapeSvgContainer, ShapeSvgInterface,
-  ContainerInterface, ElementAttributes, BoardInterface
 } from './../../types';
 
-export class Container implements ContainerInterface {
+export class ShapeContainer implements ShapeContainerInterface {
   events: ShapeEvents;
-  board: BoardInterface;
+  board: BoardMainInterface;
   added: ShapeSvgContainer = {};
   drawing: ShapeObjectInterface;
   selected: ShapeSvgInterface;
   handler: Function;
 
-  constructor(board: BoardInterface) {
+  constructor(board: BoardMainInterface) {
     this.board = board;
     this.events = new ShapeEvents(board);
   }
@@ -34,10 +34,11 @@ export class Container implements ContainerInterface {
       this.deleteAll();
     } else if (newLength) {
       // Current shape exclude
-      const { instance } = this.drawing;
-      if (instance.node && newLength > oldLength) {
-        const id = instance.node.id;
-        oldKeys = oldKeys.filter((key) => key !== id);
+      if (this.drawing) {
+        if (this.drawing.instance.node && newLength > oldLength) {
+          const id = this.drawing.instance.node.id;
+          oldKeys = oldKeys.filter((key) => key !== id);
+        }
       }
 
       this.removeOld(objects, oldKeys);
@@ -83,9 +84,13 @@ export class Container implements ContainerInterface {
 
   create(e: Event): void {
     if (e) {
-      this.drawing = this.build(e);
-      this.initEvents(this.drawing.instance);
-      this.drawing.instance.on('drawstop', this.events.createPre.bind(this.events));
+      this.board.deps.options.createPre(e);
+
+      if (!e.defaultPrevented) {
+        this.drawing = this.build(e);
+        this.initEvents(this.drawing.instance);
+        this.drawing.instance.on('drawstop', this.events.create.bind(this.events));
+      }
     }
   }
 
@@ -135,12 +140,12 @@ export class Container implements ContainerInterface {
       const existing = this.added[object.uid];
 
       if (!existing) {
-        this.loadOne(object.event.element, object.updatedAt);
+        this.loadOne(object.data, object.updatedAt);
       } else if (!existing.updatedAt) {
         existing.updatedAt = object.updatedAt;
       } else if (object.updatedAt !== existing.updatedAt) {
         existing.parent().remove();
-        this.loadOne(object.event.element, object.updatedAt);
+        this.loadOne(object.data, object.updatedAt);
       }
     }
   }

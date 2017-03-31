@@ -1,9 +1,9 @@
-import { Mouse, BoardEventsInterface, BoardOptionsInterface, ContainerInterface, HistoryInterface } from './index';
+import { BoardMouseInterface, BoardEventsInterface, BoardOptionsInterface, ShapeContainerInterface, ShapeHistoryInterface } from './index';
 
 export interface Dependencies {
-  mouse?: Mouse;
+  mouse?: BoardMouseInterface;
   events?: BoardEventsInterface;
   options?: BoardOptionsInterface;
-  container?: ContainerInterface;
-  history?: HistoryInterface;
+  container?: ShapeContainerInterface;
+  history?: ShapeHistoryInterface;
 }

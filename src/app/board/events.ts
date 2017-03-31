@@ -1,17 +1,20 @@
-import { BoardEventsInterface, BoardInterface, Mouse, ShapeObjectInterface, ContainerInterface } from './../../types';
+import {
+  BoardEventsInterface, BoardMainInterface, BoardMouseInterface,
+  ShapeContainerInterface, ShapeObjectInterface, ShapeSvgInterface
+} from './../../types';
 
 export class BoardEvents implements BoardEventsInterface {
-  board: BoardInterface;
+  board: BoardMainInterface;
 
-  constructor(board: BoardInterface) {
+  constructor(board: BoardMainInterface) {
     this.board = board;
   }
 
-  get mouse(): Mouse {
+  get mouse(): BoardMouseInterface {
     return this.board.deps.mouse;
   }
 
-  get container(): ContainerInterface {
+  get container(): ShapeContainerInterface {
     return this.board.deps.container;
   }
 
@@ -19,18 +22,24 @@ export class BoardEvents implements BoardEventsInterface {
     return this.container.drawing;
   }
 
+  get instance(): ShapeSvgInterface {
+    return this.drawing && this.drawing.instance;
+  }
+
   up(e: Event): void {
     this.mouse.holding = false;
 
     switch (this.mouse.type) {
       case 'draw':
-        if (this.drawing.instance.draw) {
-          this.drawing.instance.draw(e);
+        if (this.instance) {
+          this.instance.draw(e);
         }
         break;
       case 'stop':
-        this.drawing.instance.draw('stop', e);
-        this.mouse.type = this.mouse.prev;
+        if (this.instance) {
+          this.instance.draw('stop', e);
+          this.mouse.type = this.mouse.prev;
+        }
         break;
     }
   }
@@ -44,7 +53,9 @@ export class BoardEvents implements BoardEventsInterface {
         break;
       case 'draw':
         this.container.create(e);
-        this.container.handler = this.drawing.instance.remember('_paintHandler');
+        if (this.instance) {
+          this.container.handler = this.instance.remember('_paintHandler');
+        }
         break;
     }
   }

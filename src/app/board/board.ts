@@ -1,9 +1,9 @@
 import { Doc, G } from 'svg.js';
-import { BoardEvents, BoardOptions } from './';
-import { Container, History } from './../shape';
-import { Dependencies, Mouse, Options, BoardInterface } from './../../types';
+import { BoardEvents, BoardOptions, BoardMouse } from './';
+import { ShapeContainer, ShapeHistory } from './../shape';
+import { Dependencies, Options, BoardMainInterface } from './../../types';
 
-export class Board implements BoardInterface {
+export class BoardMain implements BoardMainInterface {
   board: Doc;
   group: G;
   deps: Dependencies;
@@ -23,11 +23,11 @@ export class Board implements BoardInterface {
 
   private dependencies(options: Options): void {
     this.deps = {};
-    this.deps.mouse = new Mouse();
+    this.deps.mouse = new BoardMouse();
     this.deps.events = new BoardEvents(this);
     this.deps.options = new BoardOptions(options);
-    this.deps.container = new Container(this);
-    this.deps.history = new History(this);
+    this.deps.container = new ShapeContainer(this);
+    this.deps.history = new ShapeHistory(this);
   }
 
   private options(): void {

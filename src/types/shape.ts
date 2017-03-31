@@ -1,5 +1,13 @@
 import { Doc } from 'svg.js';
-import { BoardInterface, EventFunction, VoidFunction } from './';
+import { BoardMainInterface, EventFunction, VoidFunction } from './';
+
+export type ShapeHistoryStorage = 'undo'|'redo';
+export type ShapeHistoryTypes = 'draw'|'update'|'remove'|'removeAll';
+export type ShapeHistoryWhen = 'start'|'end';
+
+export type ShapeHistoryAddFunction = (objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen) => void;
+export type ShapeHistoryRemoveFunction = (storage: ShapeHistoryStorage) => ShapeHistoryElementInterface;
+export type ShapeHistoryLastFunction = (storage: ShapeHistoryStorage) => ShapeHistoryElementInterface;
 
 export interface ShapeSvgInterface extends Doc {
   updatedAt: string;
@@ -9,14 +17,12 @@ export interface ShapeSvgInterface extends Doc {
 }
 
 export interface ShapeObjectInterface {
-  board: BoardInterface;
+  board: BoardMainInterface;
   instance: ShapeSvgInterface;
 
   uid: string;
+  data: string;
   updatedAt: string;
-  event: {
-    element: string;
-  };
 }
 
 export interface ShapeSvgContainer {
@@ -27,8 +33,8 @@ export interface ShapeObjectContainer {
   [key: string]: ShapeObjectInterface;
 }
 
-export interface ContainerInterface {
-  board: BoardInterface;
+export interface ShapeContainerInterface {
+  board: BoardMainInterface;
   drawing: ShapeObjectInterface;
   selected: ShapeSvgInterface;
   added: ShapeSvgContainer;
@@ -41,8 +47,24 @@ export interface ContainerInterface {
 }
 
 export interface ShapeEventsInterface {
-  board: BoardInterface;
-  createPre: Function;
-  updatePre: Function;
-  updatePost: Function;
+  board: BoardMainInterface;
+  create: EventFunction;
+  updatePre: EventFunction;
+  updatePost: EventFunction;
+}
+
+export interface ShapeHistoryElementInterface {
+  type: ShapeHistoryTypes;
+  elements: ShapeObjectInterface[];
+  endElement: string;
+}
+
+export interface ShapeHistoryInterface {
+  board: BoardMainInterface;
+  undo: ShapeHistoryElementInterface[];
+  redo: ShapeHistoryElementInterface[];
+
+  add: ShapeHistoryAddFunction;
+  remove: ShapeHistoryRemoveFunction;
+  last: ShapeHistoryLastFunction;
 }

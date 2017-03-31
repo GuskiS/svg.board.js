@@ -1,8 +1,6 @@
-import * as SVG from 'svg.js';
-
 import {
-  BoardInterface, HistoryStorage, HistoryTypes, HistoryElement, HistoryInterface,
-  ShapeObjectInterface, ShapeSvgContainer, HistoryWhen
+  BoardMainInterface, ShapeHistoryStorage, ShapeHistoryTypes, ShapeHistoryInterface,
+  ShapeObjectInterface, ShapeSvgContainer, ShapeHistoryWhen, ShapeHistoryElementInterface
 } from './../../types';
 
 //           undo  |  redo
@@ -11,32 +9,44 @@ import {
 // draw   = remove | draw
 // remove = draw   | remove
 
-export class History implements HistoryInterface {
-  board: BoardInterface;
-  undo: HistoryElement[];
-  redo: HistoryElement[];
+export class ShapeHistoryElement implements ShapeHistoryElementInterface {
+  type: ShapeHistoryTypes;
+  elements: ShapeObjectInterface[];
+  endElement: string;
 
-  constructor(board: BoardInterface) {
+  constructor(type: ShapeHistoryTypes, elements: ShapeObjectInterface[], endElement?: string) {
+    this.type = type;
+    this.elements = elements;
+    this.endElement = endElement;
+  }
+};
+
+export class ShapeHistory implements ShapeHistoryInterface {
+  board: BoardMainInterface;
+  undo: ShapeHistoryElement[];
+  redo: ShapeHistoryElement[];
+
+  constructor(board: BoardMainInterface) {
     this.board = board;
     this.redo = [];
     this.undo = [];
   }
 
-  add(objects: ShapeObjectInterface[], type: HistoryTypes, when?: HistoryWhen): void {
+  add(objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen): void {
     if (type === 'update' && when === 'end') {
       const historyObject = objects[0];
       // this.last('undo').endElement = historyObject.instance.svg(null);
     } else {
-      this.undo.push(new HistoryElement(type, objects));
+      this.undo.push(new ShapeHistoryElement(type, objects));
       this.redo = [];
     }
   }
 
-  remove(storage: HistoryStorage): HistoryElement {
+  remove(storage: ShapeHistoryStorage): ShapeHistoryElement {
     return this[storage].pop();
   }
 
-  last(storage: HistoryStorage): HistoryElement {
+  last(storage: ShapeHistoryStorage): ShapeHistoryElement {
     const data = this[storage];
     return data[storage.length - 1];
   }
@@ -59,7 +69,7 @@ export class History implements HistoryInterface {
     }
   }
 
-  private actionUndo(history: HistoryElement, object: ShapeObjectInterface): void {
+  private actionUndo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
     switch (history.type) {
       case 'draw':
         return this.board.deps.options.deletePost(object);
@@ -72,7 +82,7 @@ export class History implements HistoryInterface {
     }
   }
 
-  private actionRedo(history: HistoryElement, object: ShapeObjectInterface): void {
+  private actionRedo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
     switch (history.type) {
       case 'draw':
         // this.board.deps.container.loadOne(object.uid);

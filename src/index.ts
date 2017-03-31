@@ -4,5 +4,4 @@ import 'svg.draggable.js';
 import 'svg.resize.js';
 import 'svg.select.js';
 
-export * from './app/board';
-export * from './app/shape';
+export { BoardMain as init } from './app/board';

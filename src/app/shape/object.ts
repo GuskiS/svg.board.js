@@ -1,21 +1,19 @@
-import { BoardInterface, ShapeObjectInterface, ShapeSvgInterface } from './../../types';
+import { BoardMainInterface, ShapeObjectInterface, ShapeSvgInterface } from './../../types';
 
 export class ShapeObject implements ShapeObjectInterface {
-  board: BoardInterface;
+  board: BoardMainInterface;
   instance: ShapeSvgInterface;
 
   uid: string;
+  data: string;
   updatedAt: string;
-  event: {
-    element: string;
-  };
 
-  constructor(board: BoardInterface, instance: ShapeSvgInterface, params: any) {
+  constructor(board: BoardMainInterface, instance: ShapeSvgInterface, params: any) {
     this.board = board;
     this.instance = instance;
 
     this.uid = params.uid;
-    this.event = params.event;
+    this.data = params.data;
     this.updatedAt = params.updatedAt;
   }
 }

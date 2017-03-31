@@ -24,20 +24,19 @@ export class ShapeEvents implements ShapeEventsInterface {
   createPre(e: Event): void {
     this.options.createPre(e);
 
-    if (!e.preventDefault) {
+    if (!e.defaultPrevented) {
       const shape = this.shape(e);
       this.history.add([shape], 'draw');
-      e['shape'] = shape;
-
-      this.options.createPost(e);
     }
   }
 
   updatePre(e: Event): void {
     this.options.updatePre(e);
 
-    const shape = this.shape(e);
-    this.history.add([shape], 'update', 'start');
+    if (!e.defaultPrevented) {
+      const shape = this.shape(e);
+      this.history.add([shape], 'update', 'start');
+    }
   }
 
   updatePost(e: Event): void {
@@ -47,13 +46,11 @@ export class ShapeEvents implements ShapeEventsInterface {
     if (undo.length === 1 && undo[0].instance.svg(null) === shape.instance.svg(null)) {
       this.options.deletePre(e);
 
-      if (!e.preventDefault) {
+      if (!e.defaultPrevented) {
         this.history.remove('undo');
-        this.options.deletePost(e);
       }
     } else {
       this.history.add([shape], 'update', 'end');
-      this.options.updatePost(e);
     }
   }
 

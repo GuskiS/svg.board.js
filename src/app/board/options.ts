@@ -1,7 +1,7 @@
 import * as deepmerge from 'deepmerge';
 
 import {
-  Options, BoardOptionsInterface, BoardOptionsCurrent, BoardOptionsCategory, BoardOptionsMinMax
+  Options, BoardOptionsInterface, BoardOptionsCurrent, BoardOptionsCategory, BoardOptionsMinMax, ShapeObjectInterface
 } from './../../types';
 
 export class BoardOptions implements BoardOptionsInterface {
@@ -22,10 +22,10 @@ export class BoardOptions implements BoardOptionsInterface {
     (<any>Object).assign(this, deepmerge(this, options));
   }
 
-  createPre(e: Event):  void {}
-  createPost(e: Event): void {}
-  updatePre(e: Event):  void {}
-  updatePost(e: Event): void {}
-  deletePre(e: Event):  void {}
-  deletePost(e: Event): void {}
+  createPre(e: Event): void {}
+  updatePre(e: Event): void {}
+  deletePre(e: Event): void {}
+  createPost(shape: ShapeObjectInterface): void {}
+  updatePost(shape: ShapeObjectInterface): void {}
+  deletePost(shape: ShapeObjectInterface): void {}
 }

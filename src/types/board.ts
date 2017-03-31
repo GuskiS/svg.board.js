@@ -1,8 +1,9 @@
 import { Doc, G } from 'svg.js';
-import { Dependencies, EventFunction } from './';
+import { Dependencies, EventFunction, ShapeObjectInterface } from './';
 
 export type BoardOptionsCurrent = 'CircleEmpty';
 export type BoardOptionsCategory = 'none'|'forms'|'poly';
+export type BoardOptionsPost = (shape: ShapeObjectInterface) => void;
 export interface BoardOptionsMinMax { [key: string]: number|string; };
 
 export interface BoardInterface {
@@ -28,10 +29,10 @@ export interface BoardOptionsInterface {
   category: BoardOptionsCategory;
   minMax: BoardOptionsMinMax;
 
-  createPre:  EventFunction;
-  createPost: EventFunction;
-  updatePre:  EventFunction;
-  updatePost: EventFunction;
-  deletePre:  EventFunction;
-  deletePost: EventFunction;
+  createPre: EventFunction;
+  updatePre: EventFunction;
+  deletePre: EventFunction;
+  createPost: BoardOptionsPost;
+  updatePost: BoardOptionsPost;
+  deletePost: BoardOptionsPost;
 }

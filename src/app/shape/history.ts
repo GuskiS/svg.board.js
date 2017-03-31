@@ -62,11 +62,11 @@ export class History implements HistoryInterface {
   private actionUndo(history: HistoryElement, object: ShapeObjectInterface): void {
     switch (history.type) {
       case 'draw':
-        return this.board.deps.actions.delete(SVG.get(object.uid));
+        return this.board.deps.options.deletePost(object);
       case 'remove':
-        return this.board.deps.actions.create(object);
+        return this.board.deps.options.createPost(object);
       case 'update':
-        return this.board.deps.actions.update(object);
+        return this.board.deps.options.updatePost(object);
       default:
         console.error('History undo action not found:', history.type);
     }
@@ -76,12 +76,12 @@ export class History implements HistoryInterface {
     switch (history.type) {
       case 'draw':
         // this.board.deps.container.loadOne(object.uid);
-        return this.board.deps.actions.create(object);
+        return this.board.deps.options.createPost(object);
       case 'remove':
-        return this.board.deps.actions.delete(object);
+        return this.board.deps.options.deletePost(object);
       case 'update':
         // endElement
-        return this.board.deps.actions.update(object);
+        return this.board.deps.options.updatePost(object);
       default:
         console.error('History redo action not found:', history.type);
     }

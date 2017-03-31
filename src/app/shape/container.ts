@@ -1,27 +1,27 @@
-import { Doc } from 'svg.js';
-import { ShapeObject } from './';
-import { Board } from './../board';
+import { ShapeObject, ShapeEvents } from './';
 import * as ShapeElements from './../elements';
 import {
   ShapeObjectContainer, ShapeObjectInterface, ShapeSvgContainer, ShapeSvgInterface,
-  ContainerInterface, ElementAttributes
+  ContainerInterface, ElementAttributes, BoardInterface
 } from './../../types';
 
 export class Container implements ContainerInterface {
-  board: Board;
+  events: ShapeEvents;
+  board: BoardInterface;
   added: ShapeSvgContainer = {};
   drawing: ShapeObjectInterface;
   selected: ShapeSvgInterface;
   handler: Function;
 
-  constructor(board: Board) {
+  constructor(board: BoardInterface) {
     this.board = board;
+    this.events = new ShapeEvents(board);
   }
 
-  loadOne(data: string, updatedAt: string) {
+  loadOne(data: string, updatedAt: string): void {
     const nested = this.board.group.nested();
     nested.svg(data);
-    this.events(nested.first() as ShapeSvgInterface, updatedAt);
+    this.initEvents(nested.first() as ShapeSvgInterface, updatedAt);
   }
 
   loadAll(objects: ShapeObjectContainer): void {
@@ -56,7 +56,7 @@ export class Container implements ContainerInterface {
   }
 
   select(e: Event): void {
-    if (this.board.deps.mouse.type) {
+    if (this.board.deps.mouse.select) {
       const shape = e.target['instance'];
       const current = this.selected && this.selected.id() !== shape.id(); // IE fix
 
@@ -84,7 +84,8 @@ export class Container implements ContainerInterface {
   create(e: Event): void {
     if (e) {
       this.drawing = this.build(e);
-      this.events(this.drawing.instance);
+      this.initEvents(this.drawing.instance);
+      this.drawing.instance.on('drawstop', this.events.createPre.bind(this.events));
     }
   }
 
@@ -102,17 +103,17 @@ export class Container implements ContainerInterface {
     }
   }
 
-  private events(shape: ShapeSvgInterface, updatedAt: string = null): void {
+  private initEvents(shape: ShapeSvgInterface, updatedAt: string = null): void {
     shape.updatedAt = updatedAt;
     this.added[shape.id()] = shape;
 
-    // TODO: fix bug
-    shape.mousedown(this.select);
+    shape.mousedown(this.select.bind(this));
+    const { updatePre, updatePost } = this.events;
 
-    // shape.on('resizestart', whiteboardDelegate.deps.Events.shapeWillUpdate);
-    // shape.on('resizedone', whiteboardDelegate.deps.Events.shapeWasUpdated);
-    // shape.on('dragstart', whiteboardDelegate.deps.Events.shapeWillUpdate);
-    // shape.on('dragend', whiteboardDelegate.deps.Events.shapeWasUpdated);
+    shape.on('resizestart', updatePre.bind(this.events));
+    shape.on('resizedone', updatePost.bind(this.events));
+    shape.on('dragstart', updatePre.bind(this.events));
+    shape.on('dragend', updatePost.bind(this.events));
   }
 
   private moveSelectizeToParent(): void {

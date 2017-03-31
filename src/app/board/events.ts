@@ -1,7 +1,6 @@
-import { Board } from './board';
-import { BoardEvents, BoardInterface, Dependencies, Mouse, ShapeObjectInterface, ContainerInterface } from './../../types';
+import { BoardEventsInterface, BoardInterface, Mouse, ShapeObjectInterface, ContainerInterface } from './../../types';
 
-export class Events implements BoardEvents {
+export class BoardEvents implements BoardEventsInterface {
   board: BoardInterface;
 
   constructor(board: BoardInterface) {

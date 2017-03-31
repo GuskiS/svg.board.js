@@ -5,7 +5,7 @@ export interface ElementInterface {
   event: Event;
   nested: ShapeSvgInterface;
   attrs: any;
-  build: Function;
+  build: () => ShapeSvgInterface|void;
 }
 
 export interface ElementAttributes {

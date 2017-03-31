@@ -1,8 +1,7 @@
-import { Board } from './../board';
-import { ShapeObjectInterface, ShapeSvgInterface } from './../../types';
+import { BoardInterface, ShapeObjectInterface, ShapeSvgInterface } from './../../types';
 
 export class ShapeObject implements ShapeObjectInterface {
-  board: Board;
+  board: BoardInterface;
   instance: ShapeSvgInterface;
 
   uid: string;
@@ -11,7 +10,7 @@ export class ShapeObject implements ShapeObjectInterface {
     element: string;
   };
 
-  constructor(board: Board, instance: ShapeSvgInterface, params: any) {
+  constructor(board: BoardInterface, instance: ShapeSvgInterface, params: any) {
     this.board = board;
     this.instance = instance;
 

@@ -1,7 +1,7 @@
 import { Doc, G } from 'svg.js';
-import { Events } from './events';
-import { Container } from './../shape/container';
-import { BoardOptions, Dependencies, Mouse, Options, BoardInterface } from './../../types';
+import { BoardEvents, BoardOptions } from './';
+import { Container, History } from './../shape';
+import { Dependencies, Mouse, Options, BoardInterface } from './../../types';
 
 export class Board implements BoardInterface {
   board: Doc;
@@ -24,9 +24,10 @@ export class Board implements BoardInterface {
   private dependencies(options: Options): void {
     this.deps = {};
     this.deps.mouse = new Mouse();
-    this.deps.events = new Events(this);
+    this.deps.events = new BoardEvents(this);
     this.deps.options = new BoardOptions(options);
     this.deps.container = new Container(this);
+    this.deps.history = new History(this);
   }
 
   private options(): void {

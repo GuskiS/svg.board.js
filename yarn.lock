@@ -2,18 +2,6 @@
 # yarn lockfile v1
 
 
-"@types/svg.js@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@types/svg.js/-/svg.js-0.0.17.tgz#c6d3e6dc314547a8004b55a1427ebbf23fd047b0"
-
-"@types/svgjs.draggable@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/svgjs.draggable/-/svgjs.draggable-0.0.30.tgz#96d074fe79bae319d8d15308c265772cbfab870f"
-
-"@types/svgjs.resize@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@types/svgjs.resize/-/svgjs.resize-0.0.5.tgz#86f14e0f568ae7facf6b474c9550d17242263817"
-
 ansi-align@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-1.1.0.tgz#2f0c1658829739add5ebb15e6b0c6e3423f016ba"
@@ -124,6 +112,10 @@ crypto-random-string@^1.0.0:
 deep-extend@~0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.1.tgz#efe4113d08085f4e6f9687759810f807469e2253"
+
+deepmerge@1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.3.2.tgz#1663691629d4dbfe364fa12a2a4f0aa86aa3a050"
 
 diff@^3.0.1:
   version "3.2.0"

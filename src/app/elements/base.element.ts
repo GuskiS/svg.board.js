@@ -12,6 +12,7 @@ export class BaseElement implements ElementInterface {
     this.event = event;
     this.nested = nested;
 
+    console.error(this.board.deps.options);
     this.options = this.default;
     this.options = options;
   }
@@ -24,12 +25,15 @@ export class BaseElement implements ElementInterface {
     this._options = deepmerge(this._options, params) as ElementAttributes;
   }
 
-  build(): void {
-    console.error('Not implemented!');
+  get build(): ShapeSvgInterface {
+    return this.shape.draw(this.event);
+  }
+
+  get shape(): any {
+    return;
   }
 
   private get default(): ElementAttributes {
-    const { color, strokeWidth } = this.board.deps.options;
-    return { fill: color, 'stroke-width': strokeWidth, stroke: color, 'pointer-events': 'all' };
+    return this.board.deps.options.shape;
   }
 }

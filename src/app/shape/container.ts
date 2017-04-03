@@ -101,7 +101,7 @@ export class ShapeContainer implements ShapeContainerInterface {
     if (Element) {
       const nested = this.board.group.nested() as ShapeSvgInterface;
       const shape = new Element(this.board, e, nested);
-      const instance = shape.build();
+      const instance = shape.build;
 
       shape.options = { id: nested.id() + instance.type + Date.now() };
       return new ShapeObject(this.board, instance.attr(shape.options), {});

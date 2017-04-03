@@ -1,16 +1,14 @@
 import * as deepmerge from 'deepmerge';
 
 import {
-  Options, BoardOptionsInterface, BoardOptionsCurrent,
+  Options, BoardOptionsInterface, BoardOptionsCurrent, ElementAttributes,
   BoardOptionsCategory, BoardOptionsMinMax, ShapeObjectInterface
 } from './../../types';
 
 export class BoardOptions implements BoardOptionsInterface {
-  color = '#BADA55';
   width = '100%';
   height = '100%';
-  strokeWidth = '2';
-  current: BoardOptionsCurrent = 'CircleEmpty';
+  current: BoardOptionsCurrent = 'Circle';
   category: BoardOptionsCategory = 'forms';
   minMax: BoardOptionsMinMax = {
     minX: 0,
@@ -18,8 +16,18 @@ export class BoardOptions implements BoardOptionsInterface {
     maxX: this.width,
     maxY: this.height
   };
+  shape: ElementAttributes = {
+    'pointer-events': 'all',
+    'stroke-width': '2',
+    'fill': '#BADA55',
+    'stroke': '#BADA55'
+  };
 
   constructor(options: Options = {}) {
+    this.set = options;
+  }
+
+  set set(options: Options) {
     (<any>Object).assign(this, deepmerge(this, options));
   }
 

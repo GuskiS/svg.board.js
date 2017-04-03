@@ -1,8 +1,8 @@
 import { Doc, G } from 'svg.js';
-import { Dependencies, EventFunction, ShapeObjectInterface } from './';
+import { Dependencies, EventFunction, ShapeObjectInterface, ElementAttributes } from './';
 
 export type BoardMouseType = 'select'|'draw'|'stop';
-export type BoardOptionsCurrent = 'CircleEmpty';
+export type BoardOptionsCurrent = 'Circle'|'Rect';
 export type BoardOptionsCategory = 'none'|'forms'|'poly';
 export type BoardOptionsPost = (shape: ShapeObjectInterface) => void;
 export interface BoardOptionsMinMax { [key: string]: number|string; };
@@ -22,13 +22,12 @@ export interface BoardEventsInterface {
 }
 
 export interface BoardOptionsInterface {
-  color: string;
   width: string;
   height: string;
-  strokeWidth: string;
   current: BoardOptionsCurrent;
   category: BoardOptionsCategory;
   minMax: BoardOptionsMinMax;
+  shape: ElementAttributes;
 
   createPre: EventFunction;
   updatePre: EventFunction;

@@ -1,14 +1,9 @@
-import { EmptyElement } from './empty.element';
+import { BaseElement } from './base.element';
 import { BoardMainInterface, ShapeSvgInterface, ElementInterface, ElementAttributes } from './../../types';
 
-export class CircleEmpty extends EmptyElement {
+export class Circle extends BaseElement {
   constructor(board: BoardMainInterface, event: MouseEvent, nested: ShapeSvgInterface, options: ElementAttributes = {}) {
     super(board, event, nested, options);
-  }
-
-  build(): ShapeSvgInterface {
-    super.build();
-    return this.shape.draw(this.event);
   }
 
   get shape(): any {

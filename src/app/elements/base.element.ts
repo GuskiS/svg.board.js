@@ -12,7 +12,6 @@ export class BaseElement implements ElementInterface {
     this.event = event;
     this.nested = nested;
 
-    console.error(this.board.deps.options);
     this.options = this.default;
     this.options = options;
   }
@@ -34,6 +33,6 @@ export class BaseElement implements ElementInterface {
   }
 
   private get default(): ElementAttributes {
-    return this.board.deps.options.shape;
+    return this.board.options.shape;
   }
 }

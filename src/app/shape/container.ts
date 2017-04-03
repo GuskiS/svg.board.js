@@ -56,9 +56,9 @@ export class ShapeContainer implements ShapeContainerInterface {
     this.added = {};
   }
 
-  select(e: MouseEvent): void {
-    if (this.board.deps.mouse.select) {
-      const shape = e.target['instance'];
+  select(event: MouseEvent): void {
+    if (this.board.mouse.select) {
+      const shape = event.target['instance'];
       const current = this.selected && this.selected.id() !== shape.id(); // IE fix
 
       if (shape && (!this.selected || current)) {
@@ -66,10 +66,10 @@ export class ShapeContainer implements ShapeContainerInterface {
 
         this.selected = shape
           .selectize({ radius: 10 })
-          .resize(this.board.deps.options.minMax)
+          .resize(this.board.options.minMax)
           .draggable();
 
-        this.selected.remember('_draggable').start(e);
+        this.selected.remember('_draggable').start(event);
         this.moveSelectizeToParent();
       }
     }
@@ -82,25 +82,25 @@ export class ShapeContainer implements ShapeContainerInterface {
     }
   }
 
-  create(e: MouseEvent): void {
-    if (e) {
-      this.board.deps.options.createPre(e);
+  create(event: MouseEvent): void {
+    if (event) {
+      this.board.options.createPre(event);
 
-      if (!e.defaultPrevented) {
-        this.drawing = this.build(e);
+      if (!event.defaultPrevented) {
+        this.drawing = this.build(event);
         this.initEvents(this.drawing.instance);
         this.drawing.instance.on('drawstop', this.events.create.bind(this.events));
       }
     }
   }
 
-  private build(e: MouseEvent): ShapeObjectInterface {
-    const { current } = this.board.deps.options;
+  private build(event: MouseEvent): ShapeObjectInterface {
+    const { current } = this.board.options;
     const Element = ShapeElements[current];
 
     if (Element) {
       const nested = this.board.group.nested() as ShapeSvgInterface;
-      const shape = new Element(this.board, e, nested);
+      const shape = new Element(this.board, event, nested);
       const instance = shape.build;
 
       shape.options = { id: nested.id() + instance.type + Date.now() };

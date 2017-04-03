@@ -1,5 +1,5 @@
 import { Doc, G } from 'svg.js';
-import { Dependencies, EventFunction, ShapeObjectInterface, ElementAttributes } from './';
+import { Dependencies, EventFunction, ShapeObjectInterface, ElementAttributes, ShapeContainerInterface, ShapeHistoryInterface } from './';
 
 export type BoardMouseType = 'select'|'draw'|'stop';
 export type BoardOptionsCurrent = 'Circle'|'Rect';
@@ -11,6 +11,10 @@ export interface BoardMainInterface {
   board: Doc;
   group: G;
   deps: Dependencies;
+  mouse: BoardMouseInterface;
+  options: BoardOptionsInterface;
+  container: ShapeContainerInterface;
+  history: ShapeHistoryInterface;
 }
 
 export interface BoardEventsInterface {
@@ -28,6 +32,8 @@ export interface BoardOptionsInterface {
   category: BoardOptionsCategory;
   minMax: BoardOptionsMinMax;
   shape: ElementAttributes;
+
+  set: BoardOptionsInterface;
 
   createPre: EventFunction;
   updatePre: EventFunction;

@@ -1,7 +1,10 @@
 import { Doc, G } from 'svg.js';
 import { BoardEvents, BoardOptions, BoardMouse } from './';
 import { ShapeContainer, ShapeHistory } from './../shape';
-import { Dependencies, Options, BoardMainInterface } from './../../types';
+import {
+  Dependencies, Options, BoardMainInterface,
+  BoardMouseInterface, BoardOptionsInterface, ShapeContainerInterface, ShapeHistoryInterface
+} from './../../types';
 
 export class BoardMain implements BoardMainInterface {
   board: Doc;
@@ -15,35 +18,55 @@ export class BoardMain implements BoardMainInterface {
     this.init(options);
   }
 
+  get container(): ShapeContainerInterface {
+    return this.deps.container;
+  }
+
+  get history(): ShapeHistoryInterface {
+    return this.deps.history;
+  }
+
+  get mouse(): BoardMouseInterface {
+    return this.deps.mouse;
+  }
+
+  get options(): any {
+    return this.deps.options;
+  }
+
+  set options(options: any) {
+    this.options.set = options;
+  }
+
   private init(options: Options): void {
     this.dependencies(options);
-    this.options();
+    this.defaults();
     this.events();
   }
 
   private dependencies(options: Options): void {
-    this.deps = {};
-    this.deps.mouse = new BoardMouse();
-    this.deps.events = new BoardEvents(this);
-    this.deps.options = new BoardOptions(options);
-    this.deps.container = new ShapeContainer(this);
-    this.deps.history = new ShapeHistory(this);
+    this.deps = {
+      mouse: new BoardMouse(),
+      events: new BoardEvents(this),
+      options: new BoardOptions(options),
+      container: new ShapeContainer(this),
+      history: new ShapeHistory(this),
+    };
   }
 
-  private options(): void {
-    const { width, height } = this.deps.options;
+  private defaults(): void {
+    const { width, height } = this.options;
 
     this.board.size(width, height);
     this.group.size(width, height);
   }
 
   private events(): void {
-    const { events } = this.deps;
-    const { up, down, move, leave } = events;
+    const { up, down, move, leave } = this.deps.events;
 
-    this.board.on('mouseup', up.bind(events));
-    this.board.on('mousedown', down.bind(events));
-    this.board.on('mousemove', move.bind(events));
-    this.board.on('mouseleave', leave.bind(events));
+    this.board.on('mouseup', up.bind(this.deps.events));
+    this.board.on('mousedown', down.bind(this.deps.events));
+    this.board.on('mousemove', move.bind(this.deps.events));
+    this.board.on('mouseleave', leave.bind(this.deps.events));
   }
 }

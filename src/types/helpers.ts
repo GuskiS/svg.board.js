@@ -1,4 +1,4 @@
-export type EventFunction = (e: Event) => void;
+export type EventFunction = (event: MouseEvent) => void;
 export type VoidFunction = () => void;
 
 export interface Options {

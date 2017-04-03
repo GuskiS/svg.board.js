@@ -10,69 +10,61 @@ export class BoardEvents implements BoardEventsInterface {
     this.board = board;
   }
 
-  get mouse(): BoardMouseInterface {
-    return this.board.deps.mouse;
-  }
+  up(event: MouseEvent): void {
+    this.board.mouse.holding = false;
 
-  get container(): ShapeContainerInterface {
-    return this.board.deps.container;
-  }
-
-  get drawing(): ShapeObjectInterface {
-    return this.container.drawing;
-  }
-
-  get instance(): ShapeSvgInterface {
-    return this.drawing && this.drawing.instance;
-  }
-
-  up(e: MouseEvent): void {
-    this.mouse.holding = false;
-
-    switch (this.mouse.type) {
+    switch (this.board.mouse.type) {
       case 'draw':
         if (this.instance) {
-          this.instance.draw(e);
+          this.instance.draw(event);
         }
         break;
       case 'stop':
         if (this.instance) {
-          this.instance.draw('stop', e);
-          this.mouse.type = this.mouse.prev;
+          this.instance.draw('stop', event);
+          this.board.mouse.type = this.board.mouse.prev;
         }
         break;
     }
   }
 
-  down(e: MouseEvent): void {
-    this.mouse.holding = true;
+  down(event: MouseEvent): void {
+    this.board.mouse.holding = true;
 
-    switch (this.mouse.type) {
+    switch (this.board.mouse.type) {
       case 'select':
-        this.container.deselect();
+        this.board.container.deselect();
         break;
       case 'draw':
-        this.container.create(e);
+        this.board.container.create(event);
         if (this.instance) {
-          this.container.handler = this.instance.remember('_paintHandler');
+          this.board.container.handler = this.instance.remember('_paintHandler');
         }
         break;
     }
   }
 
-  move(e: MouseEvent): void {
-    // if (this.mouse.holding && this.mouse.stop) {
-    //   if (['scribbleEmpty', 'scribbleFilled'].includes(this.board.deps.options.current)) {
-    //     this.drawing.instance.remember('_paintHandler', this.container.handler);
+  move(event: MouseEvent): void {
+    // if (this.board.mouse.holding && this.board.mouse.stop) {
+    //   if (['scribbleEmpty', 'scribbleFilled'].includes(this.board.options.current)) {
+    //     this.drawing.instance.remember('_paintHandler', this.board.container.handler);
     //     this.drawing.instance.draw('point', e);
     //   }
     // }
   }
 
-  leave(e: MouseEvent): void {
-    const category = this.board.deps.options.category === 'poly';
-    if (category && this.drawing && this.mouse.holding) {
-      this.up(e);
+  leave(event: MouseEvent): void {
+    const category = this.board.options.category === 'poly';
+    if (category && this.drawing && this.board.mouse.holding) {
+      this.up(event);
     }
+  }
+
+  private get drawing(): ShapeObjectInterface {
+    return this.board.container.drawing;
+  }
+
+  private get instance(): ShapeSvgInterface {
+    return this.drawing && this.drawing.instance;
   }
 }

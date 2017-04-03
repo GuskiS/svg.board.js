@@ -54,7 +54,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
   doUndo(): void {
     if (this.undo.length) {
       const object = this.remove('undo');
-      this.board.deps.container.deselect();
+      this.board.container.deselect();
       this.redo.push(object);
       object.elements.forEach(this.actionUndo.bind(this, object));
     }
@@ -63,7 +63,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
   doRedo(): void {
     if (this.redo.length) {
       const object = this.remove('redo');
-      this.board.deps.container.deselect();
+      this.board.container.deselect();
       this.undo.push(object);
       object.elements.forEach(this.actionRedo.bind(this, object));
     }
@@ -72,11 +72,11 @@ export class ShapeHistory implements ShapeHistoryInterface {
   private actionUndo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
     switch (history.type) {
       case 'draw':
-        return this.board.deps.options.deletePost(object);
+        return this.board.options.deletePost(object);
       case 'remove':
-        return this.board.deps.options.createPost(object);
+        return this.board.options.createPost(object);
       case 'update':
-        return this.board.deps.options.updatePost(object);
+        return this.board.options.updatePost(object);
       default:
         console.error('History undo action not found:', history.type);
     }
@@ -85,13 +85,13 @@ export class ShapeHistory implements ShapeHistoryInterface {
   private actionRedo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
     switch (history.type) {
       case 'draw':
-        // this.board.deps.container.loadOne(object.uid);
-        return this.board.deps.options.createPost(object);
+        // this.board.container.loadOne(object.uid);
+        return this.board.options.createPost(object);
       case 'remove':
-        return this.board.deps.options.deletePost(object);
+        return this.board.options.deletePost(object);
       case 'update':
         // endElement
-        return this.board.deps.options.updatePost(object);
+        return this.board.options.updatePost(object);
       default:
         console.error('History redo action not found:', history.type);
     }

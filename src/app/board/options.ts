@@ -23,17 +23,17 @@ export class BoardOptions implements BoardOptionsInterface {
     'stroke': '#BADA55'
   };
 
-  constructor(options: Options = {}) {
+  constructor(options: any = {}) {
     this.set = options;
   }
 
-  set set(options: Options) {
+  set set(options: any) {
     (<any>Object).assign(this, deepmerge(this, options));
   }
 
-  createPre(e: MouseEvent): void {}
-  updatePre(e: MouseEvent): void {}
-  deletePre(e: MouseEvent): void {}
+  createPre(event: MouseEvent): void {}
+  updatePre(event: MouseEvent): void {}
+  deletePre(event: MouseEvent): void {}
   createPost(shape: ShapeObjectInterface): void {}
   updatePost(shape: ShapeObjectInterface): void {}
   deletePost(shape: ShapeObjectInterface): void {}

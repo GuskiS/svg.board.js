@@ -13,21 +13,13 @@ export class ShapeEvents implements ShapeEventsInterface {
     this.board = board;
   }
 
-  get history(): ShapeHistoryInterface {
-    return this.board.deps.history;
+  preDrag(shape: ShapeSvgInterface, event: MouseEvent): void {
+    this.board.options.updatePre(event);
   }
 
-  get options(): BoardOptionsInterface {
-    return this.board.deps.options;
-  }
-
-  preDrag(shape: ShapeSvgInterface, e: MouseEvent): void {
-    this.options.updatePre(e);
-  }
-
-  preResize(shape: ShapeSvgInterface, e: MouseEvent): void {
-    this.options.updatePre(e);
-    if (e.defaultPrevented) {
+  preResize(shape: ShapeSvgInterface, event: MouseEvent): void {
+    this.board.options.updatePre(event);
+    if (event.defaultPrevented) {
       shape.resize('stop');
       shape._memory._resizeHandler.update = () => {};
       delete shape._memory._resizeHandler;
@@ -36,35 +28,35 @@ export class ShapeEvents implements ShapeEventsInterface {
     }
   }
 
-  create(e: MouseEvent): void {
-    const shape = this.shape(e);
-    this.history.add([shape], 'draw');
+  create(event: MouseEvent): void {
+    const shape = this.shape(event);
+    this.board.history.add([shape], 'draw');
   }
 
-  updatePre(e: MouseEvent): void {
-    if (!e.defaultPrevented) {
-      const shape = this.shape(e);
-      this.history.add([shape], 'update', 'start');
+  updatePre(event: MouseEvent): void {
+    if (!event.defaultPrevented) {
+      const shape = this.shape(event);
+      this.board.history.add([shape], 'update', 'start');
     }
   }
 
-  updatePost(e: MouseEvent): void {
-    const shape = this.shape(e);
-    const undo = this.history.last('undo');
+  updatePost(event: MouseEvent): void {
+    const shape = this.shape(event);
+    const undo = this.board.history.last('undo');
 
     if (undo && undo.elements.length === 1 && undo.elements[0].instance.svg(null) === shape.instance.svg(null)) {
-      this.options.deletePre(e);
+      this.board.options.deletePre(event);
 
-      if (!e.defaultPrevented) {
-        this.history.remove('undo');
+      if (!event.defaultPrevented) {
+        this.board.history.remove('undo');
       }
     } else {
-      this.history.add([shape], 'update', 'end');
+      this.board.history.add([shape], 'update', 'end');
     }
   }
 
-  private shape(e: MouseEvent): ShapeObjectInterface {
-    const instance = e.target['instance'] as ShapeSvgInterface;
+  private shape(event: MouseEvent): ShapeObjectInterface {
+    const instance = event.target['instance'] as ShapeSvgInterface;
     return new ShapeObject(this.board, instance, { uid: instance.id() });
   }
 }

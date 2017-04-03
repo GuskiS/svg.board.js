@@ -21,14 +21,27 @@ export class ShapeEvents implements ShapeEventsInterface {
     return this.board.deps.options;
   }
 
+  preDrag(shape: ShapeSvgInterface, e: MouseEvent): void {
+    this.options.updatePre(e);
+  }
+
+  preResize(shape: ShapeSvgInterface, e: MouseEvent): void {
+    this.options.updatePre(e);
+    if (e.defaultPrevented) {
+      shape.resize('stop');
+      shape._memory._resizeHandler.update = () => {};
+      delete shape._memory._resizeHandler;
+    } else {
+      shape.resize();
+    }
+  }
+
   create(e: MouseEvent): void {
     const shape = this.shape(e);
     this.history.add([shape], 'draw');
   }
 
   updatePre(e: MouseEvent): void {
-    this.options.updatePre(e);
-
     if (!e.defaultPrevented) {
       const shape = this.shape(e);
       this.history.add([shape], 'update', 'start');
@@ -37,9 +50,9 @@ export class ShapeEvents implements ShapeEventsInterface {
 
   updatePost(e: MouseEvent): void {
     const shape = this.shape(e);
-    const undo = this.history.last('undo').elements;
+    const undo = this.history.last('undo');
 
-    if (undo.length === 1 && undo[0].instance.svg(null) === shape.instance.svg(null)) {
+    if (undo && undo.elements.length === 1 && undo.elements[0].instance.svg(null) === shape.instance.svg(null)) {
       this.options.deletePre(e);
 
       if (!e.defaultPrevented) {

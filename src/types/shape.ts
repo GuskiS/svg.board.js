@@ -14,6 +14,8 @@ export interface ShapeSvgInterface extends Doc {
   selectize: Function;
   start: Function;
   draw: Function;
+  resize: Function;
+  _memory: any;
 }
 
 export interface ShapeObjectInterface {

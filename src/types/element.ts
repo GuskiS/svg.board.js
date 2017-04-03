@@ -4,13 +4,14 @@ export interface ElementInterface {
   board: BoardMainInterface;
   event: Event;
   nested: ShapeSvgInterface;
-  attrs: ElementAttributes;
+  options: ElementAttributes;
   build: () => ShapeSvgInterface|void;
 }
 
 export interface ElementAttributes {
-  id: string;
-  fill: string;
-  stroke: string;
-  'stroke-width': string;
+  id?: string;
+  fill?: string;
+  stroke?: string;
+  'stroke-width'?: string;
+  'pointer-events'?: string;
 }

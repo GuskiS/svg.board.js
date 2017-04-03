@@ -95,16 +95,16 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   private build(e: MouseEvent): ShapeObjectInterface {
-    const { current, color, strokeWidth } = this.board.deps.options;
+    const { current } = this.board.deps.options;
     const Element = ShapeElements[current];
 
     if (Element) {
       const nested = this.board.group.nested() as ShapeSvgInterface;
-      const attrs = { fill: color, 'stroke-width': strokeWidth, stroke: color } as ElementAttributes;
-      const shape = new Element(this.board, e, nested, attrs).build();
+      const shape = new Element(this.board, e, nested);
+      const instance = shape.build();
 
-      attrs.id = nested.id() + shape.type + Date.now();
-      return new ShapeObject(this.board, shape.attr(attrs), {});
+      shape.options = { id: nested.id() + instance.type + Date.now() };
+      return new ShapeObject(this.board, instance.attr(shape.options), {});
     }
   }
 
@@ -113,7 +113,10 @@ export class ShapeContainer implements ShapeContainerInterface {
     this.added[shape.id()] = shape;
 
     shape.mousedown(this.select.bind(this));
-    const { updatePre, updatePost } = this.events;
+    const { updatePre, updatePost, preDrag, preResize } = this.events;
+
+    shape.on('dragmove', preDrag.bind(this.events, shape));
+    shape.on('resizestart', preResize.bind(this.events, shape));
 
     shape.on('resizestart', updatePre.bind(this.events));
     shape.on('resizedone', updatePost.bind(this.events));
@@ -122,8 +125,8 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   private moveSelectizeToParent(): void {
-    // const selectize = this.selected.remember('_selectHandler').nested;
-    // this.board.group.add(selectize);
+    const selectize = this.selected.remember('_selectHandler').nested as any;
+    this.board.group.add(selectize);
   }
 
   private removeOld(objects: ShapeObjectContainer, keys: string[]): void {

@@ -45,12 +45,10 @@ export class BoardEvents implements BoardEventsInterface {
   }
 
   move(event: MouseEvent): void {
-    // if (this.board.mouse.holding && this.board.mouse.stop) {
-    //   if (['scribbleEmpty', 'scribbleFilled'].includes(this.board.options.current)) {
-    //     this.drawing.instance.remember('_paintHandler', this.board.container.handler);
-    //     this.drawing.instance.draw('point', e);
-    //   }
-    // }
+    if (this.board.mouse.holding && this.board.mouse.stop && this.board.options.scribble) {
+      this.drawing.instance.remember('_paintHandler', this.board.container.handler);
+      this.drawing.instance.draw('point', event);
+    }
   }
 
   leave(event: MouseEvent): void {

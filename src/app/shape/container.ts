@@ -95,13 +95,16 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   private build(event: MouseEvent): ShapeObjectInterface {
-    const { current } = this.board.options;
-    const Element = ShapeElements[current];
+    const Element = ShapeElements[this.board.options.current];
 
     if (Element) {
       const nested = this.board.group.nested() as ShapeSvgInterface;
       const shape = new Element(this.board, event, nested);
       const instance = shape.build;
+
+      if (this.board.options.scribble) {
+        instance.remember('_paintHandler').drawCircles = () => {};
+      }
 
       shape.options = { id: nested.id() + instance.type + Date.now() };
       return new ShapeObject(this.board, instance.attr(shape.options), {});

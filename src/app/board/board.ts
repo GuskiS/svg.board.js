@@ -2,7 +2,7 @@ import { Doc, G } from 'svg.js';
 import { BoardEvents, BoardOptions, BoardMouse } from './';
 import { ShapeContainer, ShapeHistory } from './../shape';
 import {
-  Dependencies, Options, BoardMainInterface,
+  Dependencies, Options, BoardMainInterface, BoardOptionsCurrent, BoardOptionsCategory, ElementAttributes,
   BoardMouseInterface, BoardOptionsInterface, ShapeContainerInterface, ShapeHistoryInterface
 } from './../../types';
 
@@ -38,6 +38,10 @@ export class BoardMain implements BoardMainInterface {
     this.options.set = options;
   }
 
+  changeShape(current: BoardOptionsCurrent, category: BoardOptionsCategory, shape: ElementAttributes = {}): void {
+    this.options = { current, category, shape };
+  }
+
   private init(options: Options): void {
     this.dependencies(options);
     this.defaults();
@@ -46,7 +50,7 @@ export class BoardMain implements BoardMainInterface {
 
   private dependencies(options: Options): void {
     this.deps = {
-      mouse: new BoardMouse(),
+      mouse: new BoardMouse(this),
       events: new BoardEvents(this),
       options: new BoardOptions(options),
       container: new ShapeContainer(this),

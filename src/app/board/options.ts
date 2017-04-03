@@ -27,6 +27,10 @@ export class BoardOptions implements BoardOptionsInterface {
     this.set = options;
   }
 
+  get scribble(): boolean {
+    return this.current === 'Scribble';
+  }
+
   set set(options: any) {
     (<any>Object).assign(this, deepmerge(this, options));
   }

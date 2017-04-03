@@ -1,12 +1,14 @@
-import { BoardMouseType, BoardMouseInterface } from './../../types';
+import { BoardMouseType, BoardMouseInterface, BoardMainInterface } from './../../types';
 
 export class BoardMouse implements BoardMouseInterface {
+  board: BoardMainInterface;
   currType: BoardMouseType;
   prevType: BoardMouseType;
   holding: boolean;
 
-  constructor() {
-    this.currType = 'draw';
+  constructor(board: BoardMainInterface) {
+    this.board = board;
+    this.currType = 'select';
   }
 
   get type(): BoardMouseType {
@@ -14,6 +16,7 @@ export class BoardMouse implements BoardMouseInterface {
   }
 
   set type(newType: BoardMouseType) {
+    this.board.container.deselect();
     this.prevType = this.currType;
     this.currType = newType;
   }

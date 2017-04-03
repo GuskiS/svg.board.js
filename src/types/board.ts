@@ -2,7 +2,7 @@ import { Doc, G } from 'svg.js';
 import { Dependencies, EventFunction, ShapeObjectInterface, ElementAttributes, ShapeContainerInterface, ShapeHistoryInterface } from './';
 
 export type BoardMouseType = 'select'|'draw'|'stop';
-export type BoardOptionsCurrent = 'Circle'|'Rect';
+export type BoardOptionsCurrent = 'Circle'|'Rect'|'Line'|'Scribble';
 export type BoardOptionsCategory = 'none'|'forms'|'poly';
 export type BoardOptionsPost = (shape: ShapeObjectInterface) => void;
 export interface BoardOptionsMinMax { [key: string]: number|string; };
@@ -33,6 +33,7 @@ export interface BoardOptionsInterface {
   minMax: BoardOptionsMinMax;
   shape: ElementAttributes;
 
+  scribble: boolean;
   set: BoardOptionsInterface;
 
   createPre: EventFunction;

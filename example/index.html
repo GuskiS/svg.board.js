@@ -11,6 +11,8 @@
       }
       .container {
         margin: 0 auto;
+        max-width: 100%;
+        max-height: 100%;
         width: 1200px;
         height: 560px;
         border: 1px solid #ccc;
@@ -18,10 +20,39 @@
       .container #whiteboard {
         background-color: #fff;
       }
+
+      .svg_select_points_rot {
+        stroke-width: 1;
+        stroke: black;
+        fill: gray;
+      }
+      .svg_select_boundingRect {
+        stroke-width: 1;
+        stroke-dasharray: 10 10;
+        stroke: black;
+        fill-opacity: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
 
   <body>
+    Action
+    <select onchange='action(event)'>
+      <option value='Hand'>Hand</option>
+      <option value='Circle'>Circle</option>
+      <option value='Rect'>Rect</option>
+      <option value='Line'>Line</option>
+      <option value='Scribble'>Scribble</option>
+    </select>
+    Fill
+    <select onchange='fill(event)'>
+      <option value='#BADA55'>#BADA55</option>
+      <option value='red'>Red</option>
+      <option value='none'>None</option>
+      <option value='orange'>Orange</option>
+    </select>
+
     <div class='container'>
       <svg id='whiteboard' height='100%' width='100%'></svg>
     </div>

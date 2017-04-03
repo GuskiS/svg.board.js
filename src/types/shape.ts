@@ -15,6 +15,7 @@ export interface ShapeSvgInterface extends Doc {
   start: Function;
   draw: Function;
   resize: Function;
+  drawCircles: Function;
   _memory: any;
 }
 

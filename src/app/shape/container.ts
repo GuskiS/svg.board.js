@@ -56,7 +56,7 @@ export class ShapeContainer implements ShapeContainerInterface {
     this.added = {};
   }
 
-  select(e: Event): void {
+  select(e: MouseEvent): void {
     if (this.board.deps.mouse.select) {
       const shape = e.target['instance'];
       const current = this.selected && this.selected.id() !== shape.id(); // IE fix
@@ -82,7 +82,7 @@ export class ShapeContainer implements ShapeContainerInterface {
     }
   }
 
-  create(e: Event): void {
+  create(e: MouseEvent): void {
     if (e) {
       this.board.deps.options.createPre(e);
 
@@ -94,12 +94,12 @@ export class ShapeContainer implements ShapeContainerInterface {
     }
   }
 
-  private build(e: Event): ShapeObjectInterface {
+  private build(e: MouseEvent): ShapeObjectInterface {
     const { current, color, strokeWidth } = this.board.deps.options;
     const Element = ShapeElements[current];
 
     if (Element) {
-      const nested = this.board.group.nested();
+      const nested = this.board.group.nested() as ShapeSvgInterface;
       const attrs = { fill: color, 'stroke-width': strokeWidth, stroke: color } as ElementAttributes;
       const shape = new Element(this.board, e, nested, attrs).build();
 

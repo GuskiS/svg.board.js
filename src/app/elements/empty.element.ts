@@ -1,8 +1,9 @@
 import { BaseElement } from './base.element';
+import { BoardMainInterface, ShapeSvgInterface, ElementInterface, ElementAttributes } from './../../types';
 
 export class EmptyElement extends BaseElement {
-  constructor(...args) {
-    super(args[0], args[1], args[2], args[3]);
+  constructor(board: BoardMainInterface, event: MouseEvent, nested: ShapeSvgInterface, attrs: ElementAttributes) {
+    super(board, event, nested, attrs);
   }
 
   build(): void {

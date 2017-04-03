@@ -26,7 +26,7 @@ export class BoardEvents implements BoardEventsInterface {
     return this.drawing && this.drawing.instance;
   }
 
-  up(e: Event): void {
+  up(e: MouseEvent): void {
     this.mouse.holding = false;
 
     switch (this.mouse.type) {
@@ -44,7 +44,7 @@ export class BoardEvents implements BoardEventsInterface {
     }
   }
 
-  down(e: Event): void {
+  down(e: MouseEvent): void {
     this.mouse.holding = true;
 
     switch (this.mouse.type) {
@@ -60,7 +60,7 @@ export class BoardEvents implements BoardEventsInterface {
     }
   }
 
-  move(e: Event): void {
+  move(e: MouseEvent): void {
     // if (this.mouse.holding && this.mouse.stop) {
     //   if (['scribbleEmpty', 'scribbleFilled'].includes(this.board.deps.options.current)) {
     //     this.drawing.instance.remember('_paintHandler', this.container.handler);
@@ -69,7 +69,7 @@ export class BoardEvents implements BoardEventsInterface {
     // }
   }
 
-  leave(e: Event): void {
+  leave(e: MouseEvent): void {
     const category = this.board.deps.options.category === 'poly';
     if (category && this.drawing && this.mouse.holding) {
       this.up(e);

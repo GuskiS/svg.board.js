@@ -2,11 +2,11 @@ import { BoardMainInterface, ShapeSvgInterface, ElementInterface, ElementAttribu
 
 export class BaseElement implements ElementInterface {
   board: BoardMainInterface;
-  event: Event;
+  event: MouseEvent;
   nested: ShapeSvgInterface;
   attrs: ElementAttributes;
 
-  constructor(board: BoardMainInterface, event: Event, nested: ShapeSvgInterface, attrs: ElementAttributes) {
+  constructor(board: BoardMainInterface, event: MouseEvent, nested: ShapeSvgInterface, attrs: ElementAttributes) {
     this.board = board;
     this.event = event;
     this.nested = nested;

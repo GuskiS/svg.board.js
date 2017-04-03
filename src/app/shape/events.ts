@@ -21,12 +21,12 @@ export class ShapeEvents implements ShapeEventsInterface {
     return this.board.deps.options;
   }
 
-  create(e: Event): void {
+  create(e: MouseEvent): void {
     const shape = this.shape(e);
     this.history.add([shape], 'draw');
   }
 
-  updatePre(e: Event): void {
+  updatePre(e: MouseEvent): void {
     this.options.updatePre(e);
 
     if (!e.defaultPrevented) {
@@ -35,7 +35,7 @@ export class ShapeEvents implements ShapeEventsInterface {
     }
   }
 
-  updatePost(e: Event): void {
+  updatePost(e: MouseEvent): void {
     const shape = this.shape(e);
     const undo = this.history.last('undo').elements;
 
@@ -50,7 +50,7 @@ export class ShapeEvents implements ShapeEventsInterface {
     }
   }
 
-  private shape(e: Event): ShapeObjectInterface {
+  private shape(e: MouseEvent): ShapeObjectInterface {
     const instance = e.target['instance'] as ShapeSvgInterface;
     return new ShapeObject(this.board, instance, { uid: instance.id() });
   }

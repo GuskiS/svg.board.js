@@ -94,6 +94,15 @@ export class ShapeContainer implements ShapeContainerInterface {
     }
   }
 
+  update(shape: ShapeSvgInterface): void {
+    const event = new MouseEvent('mouseup', { cancelable: true });
+    this.board.options.updatePre(event);
+
+    if (!event.defaultPrevented) {
+      shape.attr(this.board.options.shape);
+    }
+  }
+
   private build(event: MouseEvent): ShapeObjectInterface {
     const Element = ShapeElements[this.board.options.current];
 

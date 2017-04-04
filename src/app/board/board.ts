@@ -36,6 +36,9 @@ export class BoardMain implements BoardMainInterface {
 
   set options(options: any) {
     this.options.set = options;
+    if (options.shape && this.container.selected) {
+      this.container.update(this.container.selected);
+    }
   }
 
   changeShape(current: BoardOptionsCurrent, category: BoardOptionsCategory, shape: ElementAttributes = {}): void {

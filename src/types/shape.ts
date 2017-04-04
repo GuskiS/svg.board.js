@@ -46,6 +46,7 @@ export interface ShapeContainerInterface {
   deselect: VoidFunction;
   select: EventFunction;
   create: EventFunction;
+  update: (shape: ShapeSvgInterface) => void;
   handler: Function;
 }
 

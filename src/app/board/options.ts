@@ -17,10 +17,7 @@ export class BoardOptions implements BoardOptionsInterface {
     maxY: this.height
   };
   shape: ElementAttributes = {
-    'pointer-events': 'all',
-    'stroke-width': '2',
-    'fill': '#BADA55',
-    'stroke': '#BADA55'
+    'pointer-events': 'all'
   };
 
   constructor(options: any = {}) {

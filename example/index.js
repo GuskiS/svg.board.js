@@ -1,8 +1,14 @@
 var SvgBoard = require('../lib/index.js');
 
 var options = {
-  createPre,
-  updatePre
+  canCreate,
+  canResize,
+  deletePost,
+  updatePost,
+  shape: {
+    fill: 'none',
+    stroke: '#BADA55'
+  }
 };
 
 var board = new SvgBoard.init('whiteboard', options);
@@ -23,11 +29,26 @@ var elems = {
 };
 board.deps.container.loadAll(elems);
 
-function createPre(e) {
+function canCreate(e) {
   // e.preventDefault();
 }
-function updatePre(e) {
+function canResize(e) {
   // e.preventDefault();
+}
+
+function deletePost(object) {
+  console.error(object);
+  delete elems[object.id];
+  board.container.loadAll(elems);
+}
+
+function updatePost(object) {
+  console.error(object);
+  elems[object.id] = {
+    data: object.data,
+    updatedAt: Date.now()
+  };
+  board.container.loadAll(elems);
 }
 
 global.action = function(event) {
@@ -37,7 +58,7 @@ global.action = function(event) {
   } else {
     var shape = shapes[value];
     board.mouse.type = 'draw';
-    board.changeShape(event.target.value, shape.category, shape.options);
+    board.changeShape(value, shapes[value]);
   }
 }
 
@@ -45,32 +66,22 @@ global.fill = function(event) {
   board.options = { shape: { fill: event.target.value } };
 }
 
+global.stroke = function(event) {
+  board.options = { shape: { stroke: event.target.value } };
+}
+
+global.undo = function() {
+  console.error('undo', board.history.undo, board.history.redo);
+  board.history.doUndo();
+}
+global.redo = function() {
+  console.error('redo', board.history.undo, board.history.redo);
+  board.history.doRedo();
+}
+
 var shapes = {
-  Rect: {
-    category: 'forms',
-    options: {
-      fill: 'blue',
-    }
-  },
-  Circle: {
-    category: 'forms',
-    options: {
-      fill: '#BADA55',
-      stroke: '#BADA55',
-    }
-  },
-  Line: {
-    category: 'poly',
-    options: {
-      fill: '#BADA55',
-      stroke: '#BADA55',
-    }
-  },
-  Scribble: {
-    category: 'poly',
-    options: {
-      fill: 'none',
-      stroke: 'orange',
-    }
-  },
+  Rect: 'forms',
+  Circle: 'forms',
+  Line: 'poly',
+  Scribble: 'poly'
 }

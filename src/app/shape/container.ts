@@ -1,4 +1,4 @@
-import { ShapeObject, ShapeEvents } from './';
+import { ShapeObject, ShapeEvents, ShapeValidations } from './';
 import * as ShapeElements from './../elements';
 import {
   BoardMainInterface, ElementAttributes, ShapeContainerInterface,
@@ -7,6 +7,7 @@ import {
 
 export class ShapeContainer implements ShapeContainerInterface {
   events: ShapeEvents;
+  validations: ShapeValidations;
   board: BoardMainInterface;
   added: ShapeSvgContainer = {};
   drawing: ShapeObjectInterface;
@@ -16,6 +17,7 @@ export class ShapeContainer implements ShapeContainerInterface {
   constructor(board: BoardMainInterface) {
     this.board = board;
     this.events = new ShapeEvents(board);
+    this.validations = new ShapeValidations(board);
   }
 
   loadOne(data: string, updatedAt: string): void {
@@ -34,11 +36,9 @@ export class ShapeContainer implements ShapeContainerInterface {
       this.deleteAll();
     } else if (newLength) {
       // Current shape exclude
-      if (this.drawing) {
-        if (this.drawing.instance.node && newLength > oldLength) {
-          const id = this.drawing.instance.node.id;
-          oldKeys = oldKeys.filter((key) => key !== id);
-        }
+      if (this.drawing && this.drawing.instance.node && newLength > oldLength) {
+        const id = this.drawing.instance.node.id;
+        oldKeys = oldKeys.filter((key) => key !== id);
       }
 
       this.removeOld(objects, oldKeys);
@@ -84,23 +84,19 @@ export class ShapeContainer implements ShapeContainerInterface {
 
   create(event: MouseEvent): void {
     if (event) {
-      this.board.options.createPre(event);
-
-      if (!event.defaultPrevented) {
+      this.validations.canCreate(event, () => {
         this.drawing = this.build(event);
         this.initEvents(this.drawing.instance);
         this.drawing.instance.on('drawstop', this.events.create.bind(this.events));
-      }
+      });
     }
   }
 
   update(shape: ShapeSvgInterface): void {
     const event = new MouseEvent('mouseup', { cancelable: true });
-    this.board.options.updatePre(event);
-
-    if (!event.defaultPrevented) {
+    this.validations.canUpdate(event, () => {
       shape.attr(this.board.options.shape);
-    }
+    });
   }
 
   private build(event: MouseEvent): ShapeObjectInterface {
@@ -125,12 +121,13 @@ export class ShapeContainer implements ShapeContainerInterface {
     this.added[shape.id()] = shape;
 
     shape.mousedown(this.select.bind(this));
-    const { updatePre, updatePost, preDrag, preResize } = this.events;
+    const { updatePre, updatePost } = this.events;
 
-    shape.on('dragmove', preDrag.bind(this.events, shape));
-    shape.on('resizestart', preResize.bind(this.events, shape));
+    shape.on('dragmove', this.validations.canDrag.bind(this.events));
+    shape.on('resizestart', (event: MouseEvent) => {
+      this.validations.canResize(event, updatePre.bind(this.events, event));
+    });
 
-    shape.on('resizestart', updatePre.bind(this.events));
     shape.on('resizedone', updatePost.bind(this.events));
     shape.on('dragstart', updatePre.bind(this.events));
     shape.on('dragend', updatePost.bind(this.events));
@@ -152,7 +149,7 @@ export class ShapeContainer implements ShapeContainerInterface {
   private addNewOrChange(objects: ShapeObjectContainer): void {
     for (const id in objects) {
       const object = objects[id];
-      const existing = this.added[object.uid];
+      const existing = this.added[object.id];
 
       if (!existing) {
         this.loadOne(object.data, object.updatedAt);

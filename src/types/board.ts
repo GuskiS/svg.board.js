@@ -36,9 +36,11 @@ export interface BoardOptionsInterface {
   scribble: boolean;
   set: BoardOptionsInterface;
 
-  createPre: EventFunction;
-  updatePre: EventFunction;
-  deletePre: EventFunction;
+  canDrag: EventFunction;
+  canResize: EventFunction;
+  canUpdate: EventFunction;
+  canCreate: EventFunction;
+
   createPost: BoardOptionsPost;
   updatePost: BoardOptionsPost;
   deletePost: BoardOptionsPost;

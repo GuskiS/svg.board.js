@@ -32,9 +32,11 @@ export class BoardOptions implements BoardOptionsInterface {
     (<any>Object).assign(this, deepmerge(this, options));
   }
 
-  createPre(event: MouseEvent): void {}
-  updatePre(event: MouseEvent): void {}
-  deletePre(event: MouseEvent): void {}
+  canDrag(event: MouseEvent): void {}
+  canResize(event: MouseEvent): void {}
+  canUpdate(event: MouseEvent): void {}
+  canCreate(event: MouseEvent): void {}
+
   createPost(shape: ShapeObjectInterface): void {}
   updatePost(shape: ShapeObjectInterface): void {}
   deletePost(shape: ShapeObjectInterface): void {}

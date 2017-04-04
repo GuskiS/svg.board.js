@@ -34,8 +34,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
 
   add(objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen): void {
     if (type === 'update' && when === 'end') {
-      const historyObject = objects[0];
-      // this.last('undo').endElement = historyObject.instance.svg(null);
+      this.last('undo').endElement = objects[0].data;
     } else {
       this.undo.push(new ShapeHistoryElement(type, objects));
       this.redo = [];
@@ -48,7 +47,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
 
   last(storage: ShapeHistoryStorage): ShapeHistoryElement {
     const data = this[storage];
-    return data[storage.length - 1];
+    return data[data.length - 1];
   }
 
   doUndo(): void {
@@ -57,6 +56,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
       this.board.container.deselect();
       this.redo.push(object);
       object.elements.forEach(this.actionUndo.bind(this, object));
+      console.error('doUndo', this.undo, this.redo);
     }
   }
 
@@ -66,16 +66,20 @@ export class ShapeHistory implements ShapeHistoryInterface {
       this.board.container.deselect();
       this.undo.push(object);
       object.elements.forEach(this.actionRedo.bind(this, object));
+      console.error('doRedo', this.undo, this.redo);
     }
   }
 
   private actionUndo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
+    console.error(history.type, 'undo');
     switch (history.type) {
       case 'draw':
         return this.board.options.deletePost(object);
       case 'remove':
         return this.board.options.createPost(object);
       case 'update':
+        console.error(history.endElement === object.data);
+        this.board.container.deleteOne(object.id);
         return this.board.options.updatePost(object);
       default:
         console.error('History undo action not found:', history.type);
@@ -83,6 +87,7 @@ export class ShapeHistory implements ShapeHistoryInterface {
   }
 
   private actionRedo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
+    console.error(history.type, 'redo');
     switch (history.type) {
       case 'draw':
         // this.board.container.loadOne(object.uid);
@@ -91,6 +96,8 @@ export class ShapeHistory implements ShapeHistoryInterface {
         return this.board.options.deletePost(object);
       case 'update':
         // endElement
+        this.board.container.deleteOne(object.id);
+        object.data = history.endElement;
         return this.board.options.updatePost(object);
       default:
         console.error('History redo action not found:', history.type);

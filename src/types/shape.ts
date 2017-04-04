@@ -4,6 +4,7 @@ import { BoardMainInterface, EventFunction, VoidFunction } from './';
 export type ShapeHistoryStorage = 'undo'|'redo';
 export type ShapeHistoryTypes = 'draw'|'update'|'remove'|'removeAll';
 export type ShapeHistoryWhen = 'start'|'end';
+export type ShapeValidationFunction = (event: MouseEvent, callback: Function) => void;
 
 export type ShapeHistoryAddFunction = (objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen) => void;
 export type ShapeHistoryRemoveFunction = (storage: ShapeHistoryStorage) => ShapeHistoryElementInterface;
@@ -23,7 +24,7 @@ export interface ShapeObjectInterface {
   board: BoardMainInterface;
   instance: ShapeSvgInterface;
 
-  uid: string;
+  id: string;
   data: string;
   updatedAt: string;
 }
@@ -47,6 +48,7 @@ export interface ShapeContainerInterface {
   select: EventFunction;
   create: EventFunction;
   update: (shape: ShapeSvgInterface) => void;
+  deleteOne: (id: string) => void;
   handler: Function;
 }
 
@@ -61,6 +63,14 @@ export interface ShapeHistoryElementInterface {
   type: ShapeHistoryTypes;
   elements: ShapeObjectInterface[];
   endElement: string;
+}
+
+export interface ShapeValidationsInterface {
+  board: BoardMainInterface;
+  canDrag: ShapeValidationFunction;
+  canResize: ShapeValidationFunction;
+  canUpdate: ShapeValidationFunction;
+  canCreate: ShapeValidationFunction;
 }
 
 export interface ShapeHistoryInterface {

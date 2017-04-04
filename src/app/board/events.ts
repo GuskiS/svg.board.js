@@ -1,7 +1,4 @@
-import {
-  BoardEventsInterface, BoardMainInterface, BoardMouseInterface,
-  ShapeContainerInterface, ShapeObjectInterface, ShapeSvgInterface
-} from './../../types';
+import { BoardEventsInterface, BoardMainInterface, ShapeObjectInterface, ShapeSvgInterface } from './../../types';
 
 export class BoardEvents implements BoardEventsInterface {
   board: BoardMainInterface;

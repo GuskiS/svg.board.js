@@ -1,6 +1,6 @@
 import {
   BoardMainInterface, ShapeHistoryStorage, ShapeHistoryTypes, ShapeHistoryInterface,
-  ShapeObjectInterface, ShapeSvgContainer, ShapeHistoryWhen, ShapeHistoryElementInterface
+  ShapeObjectInterface, ShapeHistoryWhen, ShapeHistoryElementInterface
 } from './../../types';
 
 //           undo  |  redo
@@ -10,97 +10,98 @@ import {
 // remove = draw   | remove
 
 export class ShapeHistoryElement implements ShapeHistoryElementInterface {
-  type: ShapeHistoryTypes;
-  elements: ShapeObjectInterface[];
-  endElement: string;
+  shape: ShapeObjectInterface;
+  prev: string;
+  next: string;
 
-  constructor(type: ShapeHistoryTypes, elements: ShapeObjectInterface[], endElement?: string) {
-    this.type = type;
-    this.elements = elements;
-    this.endElement = endElement;
+  constructor(shape: ShapeObjectInterface, prev?: string, next?: string) {
+    this.shape = shape;
+    this.prev = prev;
+    this.next = next;
   }
-};
+
+  swap(): void {
+    const data = this.prev;
+    this.prev = this.next;
+    this.next = data;
+  }
+}
 
 export class ShapeHistory implements ShapeHistoryInterface {
-  board: BoardMainInterface;
-  undo: ShapeHistoryElement[];
-  redo: ShapeHistoryElement[];
+  private _board: BoardMainInterface;
+  private _undo: ShapeHistoryElement[];
+  private _redo: ShapeHistoryElement[];
 
   constructor(board: BoardMainInterface) {
-    this.board = board;
-    this.redo = [];
-    this.undo = [];
+    this._board = board;
+    this._redo = [];
+    this._undo = [];
   }
 
-  add(objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen): void {
-    if (type === 'update' && when === 'end') {
-      this.last('undo').endElement = objects[0].data;
-    } else {
-      this.undo.push(new ShapeHistoryElement(type, objects));
-      this.redo = [];
+  add(object: ShapeObjectInterface, type: ShapeHistoryTypes, when?: ShapeHistoryWhen): void {
+    switch (type) {
+      case 'update':
+        if (when === 'start') {
+          this._undo.push(new ShapeHistoryElement(object, object.data));
+        } else {
+          this.last('undo').next = object.data;
+        }
+        break;
+      case 'draw':
+        this._undo.push(new ShapeHistoryElement(object, undefined, object.data));
+        break;
+      case 'remove':
+        this._undo.push(new ShapeHistoryElement(object, object.data, undefined));
+        break;
     }
+
+    this._redo = [];
   }
 
   remove(storage: ShapeHistoryStorage): ShapeHistoryElement {
-    return this[storage].pop();
+    return this.storage(storage).pop();
   }
 
   last(storage: ShapeHistoryStorage): ShapeHistoryElement {
-    const data = this[storage];
+    const data = this.storage(storage);
     return data[data.length - 1];
   }
 
-  doUndo(): void {
-    if (this.undo.length) {
-      const object = this.remove('undo');
-      this.board.container.deselect();
-      this.redo.push(object);
-      object.elements.forEach(this.actionUndo.bind(this, object));
-      console.error('doUndo', this.undo, this.redo);
+  undo(): void {
+    this.perform('undo', 'redo');
+  }
+
+  redo(): void {
+    this.perform('redo', 'undo');
+  }
+
+  perform(from: ShapeHistoryStorage, to: ShapeHistoryStorage): void {
+    if (this.storage(from).length) {
+      const history = this.remove(from);
+      this._board.container.deselect();
+
+      history.swap();
+      this.action(history);
+
+      this.storage(to).push(history);
     }
   }
 
-  doRedo(): void {
-    if (this.redo.length) {
-      const object = this.remove('redo');
-      this.board.container.deselect();
-      this.undo.push(object);
-      object.elements.forEach(this.actionRedo.bind(this, object));
-      console.error('doRedo', this.undo, this.redo);
-    }
+  private storage(storage: ShapeHistoryStorage): ShapeHistoryElement[] {
+    return this[`_${storage}`];
   }
 
-  private actionUndo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
-    console.error(history.type, 'undo');
-    switch (history.type) {
-      case 'draw':
-        return this.board.options.deletePost(object);
-      case 'remove':
-        return this.board.options.createPost(object);
-      case 'update':
-        console.error(history.endElement === object.data);
-        this.board.container.deleteOne(object.id);
-        return this.board.options.updatePost(object);
-      default:
-        console.error('History undo action not found:', history.type);
-    }
-  }
+  private action(history: ShapeHistoryElement): void {
+    const { prev, next } = history;
 
-  private actionRedo(history: ShapeHistoryElement, object: ShapeObjectInterface): void {
-    console.error(history.type, 'redo');
-    switch (history.type) {
-      case 'draw':
-        // this.board.container.loadOne(object.uid);
-        return this.board.options.createPost(object);
-      case 'remove':
-        return this.board.options.deletePost(object);
-      case 'update':
-        // endElement
-        this.board.container.deleteOne(object.id);
-        object.data = history.endElement;
-        return this.board.options.updatePost(object);
-      default:
-        console.error('History redo action not found:', history.type);
+    if (!prev && next) {
+      this._board.options.createPost(history.shape);
+    } else if (prev && !next) {
+      this._board.options.deletePost(history.shape);
+    } else if (prev && next) {
+      this._board.container.deleteOne(history.shape.id);
+      history.shape.data = history.next;
+      this._board.options.updatePost(history.shape);
     }
   }
 }

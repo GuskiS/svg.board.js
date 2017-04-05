@@ -95,7 +95,9 @@ export class ShapeContainer implements ShapeContainerInterface {
   update(shape: ShapeSvgInterface): void {
     const event = new MouseEvent('mouseup', { cancelable: true });
     this.validations.canUpdate(event, () => {
+      this.events.updatePre(event, shape);
       shape.attr(this.board.options.shape);
+      this.events.updatePost(event, shape);
     });
   }
 

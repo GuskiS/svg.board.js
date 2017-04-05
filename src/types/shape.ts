@@ -6,7 +6,7 @@ export type ShapeHistoryTypes = 'draw'|'update'|'remove'|'removeAll';
 export type ShapeHistoryWhen = 'start'|'end';
 export type ShapeValidationFunction = (event: MouseEvent, callback: Function) => void;
 
-export type ShapeHistoryAddFunction = (objects: ShapeObjectInterface[], type: ShapeHistoryTypes, when?: ShapeHistoryWhen) => void;
+export type ShapeHistoryAddFunction = (objects: ShapeObjectInterface, type: ShapeHistoryTypes, when?: ShapeHistoryWhen) => void;
 export type ShapeHistoryRemoveFunction = (storage: ShapeHistoryStorage) => ShapeHistoryElementInterface;
 export type ShapeHistoryLastFunction = (storage: ShapeHistoryStorage) => ShapeHistoryElementInterface;
 
@@ -60,9 +60,10 @@ export interface ShapeEventsInterface {
 }
 
 export interface ShapeHistoryElementInterface {
-  type: ShapeHistoryTypes;
-  elements: ShapeObjectInterface[];
-  endElement: string;
+  shape: ShapeObjectInterface;
+  prev: string;
+  next: string;
+  swap: () => void;
 }
 
 export interface ShapeValidationsInterface {
@@ -74,9 +75,8 @@ export interface ShapeValidationsInterface {
 }
 
 export interface ShapeHistoryInterface {
-  board: BoardMainInterface;
-  undo: ShapeHistoryElementInterface[];
-  redo: ShapeHistoryElementInterface[];
+  undo: () => void;
+  redo: () => void;
 
   add: ShapeHistoryAddFunction;
   remove: ShapeHistoryRemoveFunction;

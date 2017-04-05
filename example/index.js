@@ -3,6 +3,7 @@ var SvgBoard = require('../lib/index.js');
 var options = {
   canCreate,
   canResize,
+  createPost,
   deletePost,
   updatePost,
   shape: {
@@ -21,9 +22,11 @@ var elem2 = '<ellipse id="SvgjsSvg1012ellipse1490969496941" rx="70" ry="43" cx="
 
 var elems = {
   SvgjsSvg1010ellipse1490969466984: {
+    id: 'SvgjsSvg1010ellipse1490969466984',
     data: elem1
   },
   SvgjsSvg1012ellipse1490969496941: {
+    id: 'SvgjsSvg1012ellipse1490969496941',
     data: elem2
   },
 };
@@ -37,18 +40,26 @@ function canResize(e) {
 }
 
 function deletePost(object) {
-  console.error(object);
   delete elems[object.id];
   board.container.loadAll(elems);
 }
 
+function createPost(object) {
+  newShape(object);
+  board.container.loadAll(elems);
+}
+
 function updatePost(object) {
-  console.error(object);
+  newShape(object);
+  board.container.loadAll(elems);
+}
+
+function newShape(object) {
   elems[object.id] = {
+    id: object.id,
     data: object.data,
     updatedAt: Date.now()
   };
-  board.container.loadAll(elems);
 }
 
 global.action = function(event) {
@@ -71,12 +82,10 @@ global.stroke = function(event) {
 }
 
 global.undo = function() {
-  console.error('undo', board.history.undo, board.history.redo);
-  board.history.doUndo();
+  board.history.undo();
 }
 global.redo = function() {
-  console.error('redo', board.history.undo, board.history.redo);
-  board.history.doRedo();
+  board.history.redo();
 }
 
 var shapes = {

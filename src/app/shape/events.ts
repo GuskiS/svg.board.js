@@ -10,32 +10,21 @@ export class ShapeEvents implements ShapeEventsInterface {
 
   create(event: MouseEvent): void {
     const shape = this.shape(event);
-    this.board.history.add([shape], 'draw');
+    this.board.history.add(shape, 'draw');
   }
 
-  updatePre(event: MouseEvent): void {
-    const shape = this.shape(event);
-    this.board.history.add([shape], 'update', 'start');
+  updatePre(event: MouseEvent, instance?: ShapeSvgInterface): void {
+    const shape = this.shape(event, instance);
+    this.board.history.add(shape, 'update', 'start');
   }
 
-  updatePost(event: MouseEvent): void {
-    const shape = this.shape(event);
-    const undo = this.board.history.last('undo');
-
-    // if (undo && undo.elements.length === 1 && undo.elements[0].instance.svg(null) === shape.instance.svg(null)) {
-    //   // this.board.options.deletePre(event);
-    //   //
-    //   // console.error("----");
-    //   // if (!event.defaultPrevented) {
-    //   //   this.board.history.remove('undo');
-    //   // }
-    // } else {
-    // }
-    this.board.history.add([shape], 'update', 'end');
+  updatePost(event: MouseEvent, instance?: ShapeSvgInterface): void {
+    const shape = this.shape(event, instance);
+    this.board.history.add(shape, 'update', 'end');
   }
 
-  private shape(event: MouseEvent): ShapeObjectInterface {
-    const instance = event.target['instance'] as ShapeSvgInterface;
+  private shape(event: MouseEvent, instance?: ShapeSvgInterface): ShapeObjectInterface {
+    instance = instance || event.target['instance'] as ShapeSvgInterface;
     return new ShapeObject(this.board, instance);
   }
 }

@@ -44,14 +44,22 @@ export class ShapeHistory implements ShapeHistoryInterface {
         if (when === 'start') {
           this._undo.push(new ShapeHistoryElement(object, object.data));
         } else {
-          this.last('undo').next = object.data;
+          const last = this.last('undo');
+          if (last.prev === object.data) {
+            this.remove('undo');
+          } else {
+            last.next = object.data;
+            this._board.options.updated(object);
+          }
         }
         break;
       case 'create':
         this._undo.push(new ShapeHistoryElement(object, undefined, object.data));
+        this._board.options.created(object);
         break;
       case 'delete':
         this._undo.push(new ShapeHistoryElement(object, object.data, undefined));
+        this._board.options.deleted(object);
         break;
     }
 
@@ -95,13 +103,13 @@ export class ShapeHistory implements ShapeHistoryInterface {
     const { prev, next } = history;
 
     if (!prev && next) {
-      this._board.options.createPost(history.shape);
+      this._board.options.created(history.shape);
     } else if (prev && !next) {
-      this._board.options.deletePost(history.shape);
+      this._board.options.deleted(history.shape);
     } else if (prev && next) {
       this._board.container.deleteOne(history.shape.id);
       history.shape.data = history.next;
-      this._board.options.updatePost(history.shape);
+      this._board.options.updated(history.shape);
     }
   }
 }

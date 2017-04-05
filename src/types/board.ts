@@ -38,9 +38,9 @@ export interface BoardOptionsInterface {
   canUpdate: EventFunction;
   canCreate: EventFunction;
 
-  createPost: BoardOptionsPost;
-  updatePost: BoardOptionsPost;
-  deletePost: BoardOptionsPost;
+  created: BoardOptionsPost;
+  updated: BoardOptionsPost;
+  deleted: BoardOptionsPost;
 }
 
 export interface BoardMouseInterface {

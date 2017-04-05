@@ -37,7 +37,7 @@ export class BoardOptions implements BoardOptionsInterface {
   canUpdate(event: MouseEvent): void {}
   canCreate(event: MouseEvent): void {}
 
-  createPost(shape: ShapeObjectInterface): void {}
-  updatePost(shape: ShapeObjectInterface): void {}
-  deletePost(shape: ShapeObjectInterface): void {}
+  created(shape: ShapeObjectInterface): void {}
+  updated(shape: ShapeObjectInterface): void {}
+  deleted(shape: ShapeObjectInterface): void {}
 }

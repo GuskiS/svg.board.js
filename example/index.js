@@ -3,9 +3,9 @@ var SvgBoard = require('../lib/index.js');
 var options = {
   canCreate,
   canResize,
-  createPost,
-  deletePost,
-  updatePost,
+  created,
+  deleted,
+  updated,
   shape: {
     fill: 'none',
     stroke: '#BADA55'
@@ -39,17 +39,17 @@ function canResize(e) {
   // e.preventDefault();
 }
 
-function deletePost(object) {
+function deleted(object) {
   delete elems[object.id];
   board.container.loadAll(elems);
 }
 
-function createPost(object) {
+function created(object) {
   newShape(object);
   board.container.loadAll(elems);
 }
 
-function updatePost(object) {
+function updated(object) {
   newShape(object);
   board.container.loadAll(elems);
 }

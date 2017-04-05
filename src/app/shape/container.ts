@@ -25,6 +25,11 @@ export class ShapeContainer implements ShapeContainerInterface {
     const nested = this._board.group.nested();
     nested.svg(data);
     this.initEvents(nested.first() as ShapeSvgInterface, updatedAt);
+
+    const selectize = this.selectize;
+    if (selectize) {
+      selectize.front();
+    }
   }
 
   loadAll(objects: ShapeObjectContainer): void {
@@ -60,20 +65,16 @@ export class ShapeContainer implements ShapeContainerInterface {
   select(event: MouseEvent): void {
     if (this._board.mouse.select) {
       const shape = event.target['instance'];
-      const current = this.selected && this.selected.id() !== shape.id(); // IE fix
 
-      if (shape && (!this.selected || current)) {
-        this.deselect();
+      this.deselect();
+      this.selected = shape
+        .selectize({ radius: 10 })
+        .resize(this._board.options.minMax)
+        .draggable();
 
-        this.selected = shape
-          .selectize({ radius: 10 })
-          .resize(this._board.options.minMax)
-          .draggable();
-
-        (<any>this.selected.parent()).front();
-        this.selected.remember('_draggable').start(event);
-        this.moveSelectizeToParent();
-      }
+      (<any>this.selected.parent()).front();
+      this.selected.remember('_draggable').start(event);
+      this.moveSelectizeToParent();
     }
   }
 
@@ -136,8 +137,12 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   private moveSelectizeToParent(): void {
-    const selectize = this.selected.remember('_selectHandler').nested as any;
+    const selectize = this.selectize;
     this._board.group.add(selectize);
+  }
+
+  private get selectize(): ShapeSvgInterface {
+    return this.selected && this.selected.remember('_selectHandler').nested as any;
   }
 
   private removeOld(objects: ShapeObjectContainer, keys: string[]): void {

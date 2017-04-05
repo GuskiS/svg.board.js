@@ -1,62 +1,62 @@
 import { BoardEventsInterface, BoardMainInterface, ShapeObjectInterface, ShapeSvgInterface } from './../../types';
 
 export class BoardEvents implements BoardEventsInterface {
-  board: BoardMainInterface;
+  private _board: BoardMainInterface;
 
   constructor(board: BoardMainInterface) {
-    this.board = board;
+    this._board = board;
   }
 
   up(event: MouseEvent): void {
-    this.board.mouse.holding = false;
+    this._board.mouse.holding = false;
 
-    switch (this.board.mouse.type) {
-      case 'draw':
+    switch (this._board.mouse.type) {
+      case 'create':
         if (this.instance) {
           this.instance.draw(event);
         }
         break;
-      case 'stop':
+      case 'drawing':
         if (this.instance) {
           this.instance.draw('stop', event);
-          this.board.mouse.type = this.board.mouse.prev;
+          this._board.mouse.type = this._board.mouse.prev;
         }
         break;
     }
   }
 
   down(event: MouseEvent): void {
-    this.board.mouse.holding = true;
+    this._board.mouse.holding = true;
 
-    switch (this.board.mouse.type) {
+    switch (this._board.mouse.type) {
       case 'select':
-        this.board.container.deselect();
+        this._board.container.deselect();
         break;
-      case 'draw':
-        this.board.container.create(event);
+      case 'create':
+        this._board.container.create(event);
         if (this.instance) {
-          this.board.container.handler = this.instance.remember('_paintHandler');
+          this._board.container.handler = this.instance.remember('_paintHandler');
         }
         break;
     }
   }
 
   move(event: MouseEvent): void {
-    if (this.board.mouse.holding && this.board.mouse.stop && this.board.options.scribble) {
-      this.drawing.instance.remember('_paintHandler', this.board.container.handler);
+    if (this._board.mouse.holding && this._board.mouse.drawing && this._board.options.scribble) {
+      this.drawing.instance.remember('_paintHandler', this._board.container.handler);
       this.drawing.instance.draw('point', event);
     }
   }
 
   leave(event: MouseEvent): void {
-    const category = this.board.options.category === 'poly';
-    if (category && this.drawing && this.board.mouse.holding) {
+    const category = this._board.options.category === 'poly';
+    if (category && this.drawing && this._board.mouse.holding) {
       this.up(event);
     }
   }
 
   private get drawing(): ShapeObjectInterface {
-    return this.board.container.drawing;
+    return this._board.container.drawing;
   }
 
   private get instance(): ShapeSvgInterface {

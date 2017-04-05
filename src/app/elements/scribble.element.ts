@@ -7,7 +7,7 @@ export class Scribble extends BaseElement {
   }
 
   get shape(): any {
-    this.board.mouse.type = 'stop';
+    this.board.mouse.type = 'drawing';
     return this.nested.polyline([0, 0]);
   }
 }

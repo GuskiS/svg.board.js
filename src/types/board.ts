@@ -1,16 +1,14 @@
 import { Doc, G } from 'svg.js';
 import { Dependencies, EventFunction, ShapeObjectInterface, ElementAttributes, ShapeContainerInterface, ShapeHistoryInterface } from './';
 
-export type BoardMouseType = 'select'|'draw'|'stop';
+export type BoardMouseType = 'select'|'create'|'drawing';
 export type BoardOptionsCurrent = 'Circle'|'Rect'|'Line'|'Scribble';
-export type BoardOptionsCategory = 'none'|'forms'|'poly';
+export type BoardOptionsCategory = 'forms'|'poly';
 export type BoardOptionsPost = (shape: ShapeObjectInterface) => void;
 export interface BoardOptionsMinMax { [key: string]: number|string; };
 
 export interface BoardMainInterface {
-  board: Doc;
   group: G;
-  deps: Dependencies;
   mouse: BoardMouseInterface;
   options: BoardOptionsInterface;
   container: ShapeContainerInterface;
@@ -18,7 +16,6 @@ export interface BoardMainInterface {
 }
 
 export interface BoardEventsInterface {
-  board: BoardMainInterface;
   up: EventFunction;
   down: EventFunction;
   move: EventFunction;
@@ -47,14 +44,11 @@ export interface BoardOptionsInterface {
 }
 
 export interface BoardMouseInterface {
-  currType: BoardMouseType;
-  prevType: BoardMouseType;
-
   type: BoardMouseType;
   prev: BoardMouseType;
 
   holding: boolean;
   select: boolean;
-  draw: boolean;
-  stop: boolean;
+  create: boolean;
+  drawing: boolean;
 }

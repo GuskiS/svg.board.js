@@ -6,22 +6,23 @@ import {
 } from './../../types';
 
 export class ShapeContainer implements ShapeContainerInterface {
-  events: ShapeEvents;
-  validations: ShapeValidations;
-  board: BoardMainInterface;
   added: ShapeSvgContainer = {};
   drawing: ShapeObjectInterface;
   selected: ShapeSvgInterface;
   handler: Function;
 
+  private _events: ShapeEvents;
+  private _validations: ShapeValidations;
+  private _board: BoardMainInterface;
+
   constructor(board: BoardMainInterface) {
-    this.board = board;
-    this.events = new ShapeEvents(board);
-    this.validations = new ShapeValidations(board);
+    this._board = board;
+    this._events = new ShapeEvents(board);
+    this._validations = new ShapeValidations(board);
   }
 
   loadOne(data: string, updatedAt: string): void {
-    const nested = this.board.group.nested();
+    const nested = this._board.group.nested();
     nested.svg(data);
     this.initEvents(nested.first() as ShapeSvgInterface, updatedAt);
   }
@@ -52,12 +53,12 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   deleteAll(): void {
-    this.board.group.clear();
+    this._board.group.clear();
     this.added = {};
   }
 
   select(event: MouseEvent): void {
-    if (this.board.mouse.select) {
+    if (this._board.mouse.select) {
       const shape = event.target['instance'];
       const current = this.selected && this.selected.id() !== shape.id(); // IE fix
 
@@ -66,9 +67,10 @@ export class ShapeContainer implements ShapeContainerInterface {
 
         this.selected = shape
           .selectize({ radius: 10 })
-          .resize(this.board.options.minMax)
+          .resize(this._board.options.minMax)
           .draggable();
 
+        (<any>this.selected.parent()).front();
         this.selected.remember('_draggable').start(event);
         this.moveSelectizeToParent();
       }
@@ -83,38 +85,36 @@ export class ShapeContainer implements ShapeContainerInterface {
   }
 
   create(event: MouseEvent): void {
-    if (event) {
-      this.validations.canCreate(event, () => {
-        this.drawing = this.build(event);
-        this.initEvents(this.drawing.instance);
-        this.drawing.instance.on('drawstop', this.events.create.bind(this.events));
-      });
-    }
+    this._validations.canCreate(event, () => {
+      this.drawing = this.build(event);
+      this.initEvents(this.drawing.instance);
+      this.drawing.instance.on('drawstop', this._events.create.bind(this._events));
+    });
   }
 
   update(shape: ShapeSvgInterface): void {
     const event = new MouseEvent('mouseup', { cancelable: true });
-    this.validations.canUpdate(event, () => {
-      this.events.updatePre(event, shape);
-      shape.attr(this.board.options.shape);
-      this.events.updatePost(event, shape);
+    this._validations.canUpdate(event, () => {
+      this._events.updatePre(event, shape);
+      shape.attr(this._board.options.shape);
+      this._events.updatePost(event, shape);
     });
   }
 
   private build(event: MouseEvent): ShapeObjectInterface {
-    const Element = ShapeElements[this.board.options.current];
+    const Element = ShapeElements[this._board.options.current];
 
     if (Element) {
-      const nested = this.board.group.nested() as ShapeSvgInterface;
-      const shape = new Element(this.board, event, nested);
+      const nested = this._board.group.nested() as ShapeSvgInterface;
+      const shape = new Element(this._board, event, nested);
       const instance = shape.build;
 
-      if (this.board.options.scribble) {
+      if (this._board.options.scribble) {
         instance.remember('_paintHandler').drawCircles = () => {};
       }
 
       shape.options = { id: nested.id() + instance.type + Date.now() };
-      return new ShapeObject(this.board, instance.attr(shape.options), {});
+      return new ShapeObject(instance.attr(shape.options), {});
     }
   }
 
@@ -123,21 +123,21 @@ export class ShapeContainer implements ShapeContainerInterface {
     this.added[shape.id()] = shape;
 
     shape.mousedown(this.select.bind(this));
-    const { updatePre, updatePost } = this.events;
+    const { updatePre, updatePost } = this._events;
 
-    shape.on('dragmove', this.validations.canDrag.bind(this.events));
+    shape.on('dragmove', this._validations.canDrag.bind(this._events));
     shape.on('resizestart', (event: MouseEvent) => {
-      this.validations.canResize(event, updatePre.bind(this.events, event));
+      this._validations.canResize(event, updatePre.bind(this._events, event));
     });
 
-    shape.on('resizedone', updatePost.bind(this.events));
-    shape.on('dragstart', updatePre.bind(this.events));
-    shape.on('dragend', updatePost.bind(this.events));
+    shape.on('resizedone', updatePost.bind(this._events));
+    shape.on('dragstart', updatePre.bind(this._events));
+    shape.on('dragend', updatePost.bind(this._events));
   }
 
   private moveSelectizeToParent(): void {
     const selectize = this.selected.remember('_selectHandler').nested as any;
-    this.board.group.add(selectize);
+    this._board.group.add(selectize);
   }
 
   private removeOld(objects: ShapeObjectContainer, keys: string[]): void {

@@ -6,8 +6,8 @@ import {
 //           undo  |  redo
 // resize = update | update
 // move   = update | update
-// draw   = remove | draw
-// remove = draw   | remove
+// create = delete | create
+// delete = create | delete
 
 export class ShapeHistoryElement implements ShapeHistoryElementInterface {
   shape: ShapeObjectInterface;
@@ -47,10 +47,10 @@ export class ShapeHistory implements ShapeHistoryInterface {
           this.last('undo').next = object.data;
         }
         break;
-      case 'draw':
+      case 'create':
         this._undo.push(new ShapeHistoryElement(object, undefined, object.data));
         break;
-      case 'remove':
+      case 'delete':
         this._undo.push(new ShapeHistoryElement(object, object.data, undefined));
         break;
     }

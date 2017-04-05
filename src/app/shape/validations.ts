@@ -1,14 +1,14 @@
 import { BoardMainInterface, ShapeSvgInterface, ShapeValidationsInterface } from './../../types';
 
 export class ShapeValidations implements ShapeValidationsInterface {
-  board: BoardMainInterface;
+  private _board: BoardMainInterface;
 
   constructor(board: BoardMainInterface) {
-    this.board = board;
+    this._board = board;
   }
 
   canDrag(event: MouseEvent, callback: Function = () => {}): void {
-    this.board.options.canDrag(event);
+    this._board.options.canDrag(event);
 
     if (!event.defaultPrevented) {
       callback();
@@ -17,8 +17,8 @@ export class ShapeValidations implements ShapeValidationsInterface {
 
   // Ugly fix for resize lib
   canResize(event: MouseEvent, callback: Function = () => {}): void {
-    this.board.options.canResize(event);
-    const shape = this.board.container.selected;
+    this._board.options.canResize(event);
+    const shape = this._board.container.selected;
 
     if (event.defaultPrevented) {
       shape.resize('stop');
@@ -31,7 +31,7 @@ export class ShapeValidations implements ShapeValidationsInterface {
   }
 
   canUpdate(event: MouseEvent, callback: Function): void {
-    this.board.options.canUpdate(event);
+    this._board.options.canUpdate(event);
 
     if (!event.defaultPrevented) {
       callback();
@@ -39,7 +39,7 @@ export class ShapeValidations implements ShapeValidationsInterface {
   }
 
   canCreate(event: MouseEvent, callback: Function): void {
-    this.board.options.canCreate(event);
+    this._board.options.canCreate(event);
 
     if (!event.defaultPrevented) {
       callback();

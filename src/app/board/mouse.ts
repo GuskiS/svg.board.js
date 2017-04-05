@@ -1,39 +1,39 @@
 import { BoardMouseType, BoardMouseInterface, BoardMainInterface } from './../../types';
 
 export class BoardMouse implements BoardMouseInterface {
-  board: BoardMainInterface;
-  currType: BoardMouseType;
-  prevType: BoardMouseType;
   holding: boolean;
+  private _board: BoardMainInterface;
+  private _currType: BoardMouseType;
+  private _prevType: BoardMouseType;
 
   constructor(board: BoardMainInterface) {
-    this.board = board;
-    this.currType = 'select';
+    this._board = board;
+    this._currType = 'select';
   }
 
   get type(): BoardMouseType {
-    return this.currType;
+    return this._currType;
   }
 
   set type(newType: BoardMouseType) {
-    this.board.container.deselect();
-    this.prevType = this.currType;
-    this.currType = newType;
+    this._board.container.deselect();
+    this._prevType = this._currType;
+    this._currType = newType;
   }
 
   get prev(): BoardMouseType {
-    return this.prevType;
+    return this._prevType;
   }
 
   get select(): boolean {
-    return this.currType === 'select';
+    return this._currType === 'select';
   }
 
-  get draw(): boolean {
-    return this.currType === 'draw';
+  get create(): boolean {
+    return this._currType === 'create';
   }
 
-  get stop(): boolean {
-    return this.currType === 'stop';
+  get drawing(): boolean {
+    return this._currType === 'drawing';
   }
 }

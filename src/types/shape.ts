@@ -2,7 +2,7 @@ import { Doc } from 'svg.js';
 import { BoardMainInterface, EventFunction, VoidFunction } from './';
 
 export type ShapeHistoryStorage = 'undo'|'redo';
-export type ShapeHistoryTypes = 'draw'|'update'|'remove'|'removeAll';
+export type ShapeHistoryTypes = 'create'|'update'|'delete';
 export type ShapeHistoryWhen = 'start'|'end';
 export type ShapeValidationFunction = (event: MouseEvent, callback: Function) => void;
 
@@ -21,12 +21,10 @@ export interface ShapeSvgInterface extends Doc {
 }
 
 export interface ShapeObjectInterface {
-  board: BoardMainInterface;
-  instance: ShapeSvgInterface;
-
   id: string;
   data: string;
   updatedAt: string;
+  instance: ShapeSvgInterface;
 }
 
 export interface ShapeSvgContainer {
@@ -38,7 +36,6 @@ export interface ShapeObjectContainer {
 }
 
 export interface ShapeContainerInterface {
-  board: BoardMainInterface;
   drawing: ShapeObjectInterface;
   selected: ShapeSvgInterface;
   added: ShapeSvgContainer;
@@ -53,7 +50,6 @@ export interface ShapeContainerInterface {
 }
 
 export interface ShapeEventsInterface {
-  board: BoardMainInterface;
   create: EventFunction;
   updatePre: EventFunction;
   updatePost: EventFunction;
@@ -67,7 +63,6 @@ export interface ShapeHistoryElementInterface {
 }
 
 export interface ShapeValidationsInterface {
-  board: BoardMainInterface;
   canDrag: ShapeValidationFunction;
   canResize: ShapeValidationFunction;
   canUpdate: ShapeValidationFunction;

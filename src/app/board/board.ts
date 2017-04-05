@@ -7,31 +7,31 @@ import {
 } from './../../types';
 
 export class BoardMain implements BoardMainInterface {
-  board: Doc;
   group: G;
-  deps: Dependencies;
+  private _board: Doc;
+  private _deps: Dependencies;
 
   constructor(id: string, options: Options = {}) {
-    this.board = new Doc(id) as Doc;
-    this.group = this.board.group();
+    this._board = new Doc(id) as Doc;
+    this.group = this._board.group();
 
     this.init(options);
   }
 
   get container(): ShapeContainerInterface {
-    return this.deps.container;
+    return this._deps.container;
   }
 
   get history(): ShapeHistoryInterface {
-    return this.deps.history;
+    return this._deps.history;
   }
 
   get mouse(): BoardMouseInterface {
-    return this.deps.mouse;
+    return this._deps.mouse;
   }
 
   get options(): any {
-    return this.deps.options;
+    return this._deps.options;
   }
 
   set options(options: any) {
@@ -52,7 +52,7 @@ export class BoardMain implements BoardMainInterface {
   }
 
   private dependencies(options: Options): void {
-    this.deps = {
+    this._deps = {
       mouse: new BoardMouse(this),
       events: new BoardEvents(this),
       options: new BoardOptions(options),
@@ -64,16 +64,16 @@ export class BoardMain implements BoardMainInterface {
   private defaults(): void {
     const { width, height } = this.options;
 
-    this.board.size(width, height);
+    this._board.size(width, height);
     this.group.size(width, height);
   }
 
   private events(): void {
-    const { up, down, move, leave } = this.deps.events;
+    const { up, down, move, leave } = this._deps.events;
 
-    this.board.on('mouseup', up.bind(this.deps.events));
-    this.board.on('mousedown', down.bind(this.deps.events));
-    this.board.on('mousemove', move.bind(this.deps.events));
-    this.board.on('mouseleave', leave.bind(this.deps.events));
+    this._board.on('mouseup', up.bind(this._deps.events));
+    this._board.on('mousedown', down.bind(this._deps.events));
+    this._board.on('mousemove', move.bind(this._deps.events));
+    this._board.on('mouseleave', leave.bind(this._deps.events));
   }
 }

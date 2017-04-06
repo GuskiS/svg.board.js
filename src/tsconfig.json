@@ -6,16 +6,17 @@
     "removeComments": true,
     "noLib": false,
     "preserveConstEnums": true,
+    "sourceMap": true,
     "declaration": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "../lib"
+    "outDir": "../dist"
   },
   "files": [
     "index.ts"
   ],
   "exclude": [
-    "lib",
+    "dist",
     "node_modules"
   ],
   "compileOnSave": false,

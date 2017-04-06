@@ -46,20 +46,9 @@
       <option value='Scribble'>Scribble</option>
     </select>
     Fill
-    <select onchange='fill(event)'>
-      <option value='none'>None</option>
-      <option value='#BADA55'>#BADA55</option>
-      <option value='red'>Red</option>
-      <option value='purple'>Purple</option>
-      <option value='orange'>Orange</option>
-    </select>
+    <input type='color' onchange='fill(event)' value='#ffffff'>
     Stroke
-    <select onchange='stroke(event)'>
-      <option value='#BADA55'>#BADA55</option>
-      <option value='red'>Red</option>
-      <option value='purple'>Purple</option>
-      <option value='orange'>Orange</option>
-    </select>
+    <input type='color' onchange='stroke(event)' value='#BADA55'>
 
     <input type='button' value='<' onclick='undo()'>
     <input type='button' value='>' onclick='redo()'>

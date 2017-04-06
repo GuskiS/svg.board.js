@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "browserify": "14.1.0",
+    "svg.board.js": "file:../",
     "watchify": "3.9.0"
   }
 }

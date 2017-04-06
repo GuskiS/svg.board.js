@@ -1,4 +1,4 @@
-var SvgBoard = require('../lib/index.js');
+var SvgBoard = require('svg.board.js');
 
 var options = {
   canCreate,

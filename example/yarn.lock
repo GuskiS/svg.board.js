@@ -1472,6 +1472,50 @@ subarg@^1.0.0:
   dependencies:
     minimist "^1.1.0"
 
+"svg.board.js@file:../":
+  version "1.0.0"
+  dependencies:
+    svg.draggable.js "2.2.1"
+    svg.draw.js "2.0.1"
+    svg.js "2.5.1"
+    svg.resize.js "1.4.0"
+    svg.select.js "2.1.1"
+
+svg.draggable.js@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/svg.draggable.js/-/svg.draggable.js-2.2.1.tgz#83b00ff6b9babf10fbd1c6f86e83f1ddb0204cbf"
+  dependencies:
+    svg.js "^2.0.1"
+
+svg.draw.js@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/svg.draw.js/-/svg.draw.js-2.0.1.tgz#1ac0aec0299fec77cc86c39a9d2019d78827550e"
+  dependencies:
+    svg.js "2.x.x"
+
+svg.js@2.5.1, svg.js@2.x.x, svg.js@^2.0.1, svg.js@^2.0.2, svg.js@^2.2.5:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/svg.js/-/svg.js-2.5.1.tgz#885e7134338212407b2b8e1e059f0a6f5fa5275e"
+
+svg.resize.js@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/svg.resize.js/-/svg.resize.js-1.4.0.tgz#1acc1e4a13c46d4dc30bca95603f6dc6da33567e"
+  dependencies:
+    svg.js "^2.0.2"
+    svg.select.js "^1.0.4"
+
+svg.select.js@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/svg.select.js/-/svg.select.js-2.1.1.tgz#662438e394163da1c707bd07ae14d5542db1aaa3"
+  dependencies:
+    svg.js "^2.2.5"
+
+svg.select.js@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/svg.select.js/-/svg.select.js-1.0.4.tgz#2c0b3445c285ae2a749d9765cd2a2a79d37eba7e"
+  dependencies:
+    svg.js "2.x.x"
+
 syntax-error@^1.1.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/syntax-error/-/syntax-error-1.3.0.tgz#1ed9266c4d40be75dc55bf9bb1cb77062bb96ca1"
@@ -1585,7 +1629,7 @@ vm-browserify@~0.0.1:
   dependencies:
     indexof "0.0.1"
 
-watchify@^3.9.0:
+watchify@3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/watchify/-/watchify-3.9.0.tgz#f075fd2e8a86acde84cedba6e5c2a0bedd523d9e"
   dependencies:

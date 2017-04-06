@@ -2,19 +2,17 @@ import * as deepmerge from 'deepmerge';
 
 import {
   Options, BoardOptionsInterface, BoardOptionsCurrent, ElementAttributes,
-  BoardOptionsCategory, BoardOptionsMinMax, ShapeObjectInterface
+  BoardOptionsCategory, BoardOptionsViewBox, ShapeObjectInterface
 } from './../../types';
 
 export class BoardOptions implements BoardOptionsInterface {
-  width = '100%';
-  height = '100%';
   current: BoardOptionsCurrent = 'Circle';
   category: BoardOptionsCategory = 'forms';
-  minMax: BoardOptionsMinMax = {
-    minX: 0,
-    minY: 0,
-    maxX: this.width,
-    maxY: this.height
+  viewBox: BoardOptionsViewBox = {
+    x: 0,
+    y: 0,
+    width: 150,
+    height: 150,
   };
   shape: ElementAttributes = {
     'pointer-events': 'all'

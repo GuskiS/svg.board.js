@@ -5,7 +5,7 @@ export type BoardMouseType = 'select'|'create'|'drawing';
 export type BoardOptionsCurrent = 'Circle'|'Rect'|'Line'|'Scribble';
 export type BoardOptionsCategory = 'forms'|'poly';
 export type BoardOptionsPost = (shape: ShapeObjectInterface) => void;
-export interface BoardOptionsMinMax { [key: string]: number|string; };
+export interface BoardOptionsViewBox { [key: string]: number; };
 
 export interface BoardMainInterface {
   group: G;
@@ -23,11 +23,9 @@ export interface BoardEventsInterface {
 }
 
 export interface BoardOptionsInterface {
-  width: string;
-  height: string;
   current: BoardOptionsCurrent;
   category: BoardOptionsCategory;
-  minMax: BoardOptionsMinMax;
+  viewBox: BoardOptionsViewBox;
   shape: ElementAttributes;
 
   scribble: boolean;

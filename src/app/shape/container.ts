@@ -69,7 +69,7 @@ export class ShapeContainer implements ShapeContainerInterface {
       this.deselect();
       this.selected = shape
         .selectize({ radius: 10 })
-        .resize(this._board.options.minMax)
+        .resize()
         .draggable();
 
       (<any>this.selected.parent()).front();

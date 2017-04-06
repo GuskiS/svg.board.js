@@ -62,10 +62,7 @@ export class BoardMain implements BoardMainInterface {
   }
 
   private defaults(): void {
-    const { width, height } = this.options;
-
-    this._board.size(width, height);
-    this.group.size(width, height);
+    this._board.viewbox(this.options.viewBox);
   }
 
   private events(): void {

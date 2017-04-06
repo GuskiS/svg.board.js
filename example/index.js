@@ -1,4 +1,4 @@
-var SvgBoard = require('svg.board.js');
+var SvgBoard = require('../dist');
 
 var options = {
   canCreate,
@@ -9,6 +9,10 @@ var options = {
   shape: {
     fill: 'none',
     stroke: '#BADA55'
+  },
+  viewBox: {
+    width: 1200,
+    height: 560
   }
 };
 

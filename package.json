@@ -12,7 +12,7 @@
   "dependencies": {
     "svg.draggable.js": "2.2.1",
     "svg.draw.js": "2.0.1",
-    "svg.js": "2.5.1",
+    "svg.js": "2.5.3",
     "svg.resize.js": "1.4.0",
     "svg.select.js": "2.1.1"
   },
@@ -20,7 +20,7 @@
     "@types/deepmerge": "1.3.1",
     "deepmerge": "1.3.2",
     "rimraf": "2.6.1",
-    "tslint": "4.5.1",
+    "tslint": "5.1.0",
     "typescript": "2.2.2"
   }
 }
